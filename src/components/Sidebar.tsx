@@ -50,7 +50,7 @@ export default function Sidebar(props: Props) {
   const favourites = pages.filter((p) => p.workspaceId === activeWorkspace.id && p.favourite && !p.trashed)
   const recent = pages
     .filter((p) => p.workspaceId === activeWorkspace.id && !p.trashed)
-    .sort((a, b) => b.updatedAt - a.updatedAt)
+    .sort((a, b) => (b.lastOpenedAt ?? b.updatedAt) - (a.lastOpenedAt ?? a.updatedAt))
     .slice(0, 4)
   const trashedCount = pages.filter((p) => p.workspaceId === activeWorkspace.id && p.trashed).length
   const stats = workspaceStats(activeWorkspace, pages)

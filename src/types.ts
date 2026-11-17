@@ -50,6 +50,8 @@ export interface Page {
   trashed: boolean
   createdAt: number
   updatedAt: number
+  /** Last time the page was opened (drives the Recent list). */
+  lastOpenedAt?: number
 }
 
 /** A point-in-time copy of a page, restorable from the history timeline. */

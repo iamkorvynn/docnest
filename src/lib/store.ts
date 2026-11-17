@@ -25,6 +25,7 @@ function page(
     trashed: false,
     createdAt: now,
     updatedAt: now,
+    lastOpenedAt: now,
     ...extra,
   }
 }
