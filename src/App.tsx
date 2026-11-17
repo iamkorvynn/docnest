@@ -7,6 +7,7 @@ import { getTemplate } from './lib/templates'
 import { addSnapshot, createSnapshot, deleteSnapshot, pageDiffersFromLatest, restoreSnapshot } from './lib/versions'
 import { markdownFilename, pageToMarkdown } from './lib/markdown'
 import { workspaceFilename, workspaceToMarkdown } from './lib/export'
+import { BACKUP_ERROR_MESSAGES, parseBackup, serializeBackup } from './lib/backup'
 import { blockedActions, canCreatePage, canDeletePage, canEdit, canManageRoles, canManageWorkspace } from './lib/permissions'
 import { uid } from './lib/id'
 import Sidebar from './components/Sidebar'
@@ -168,6 +169,27 @@ export default function App() {
     a.download = filename
     a.click()
     URL.revokeObjectURL(url)
+  }
+
+  const exportBackup = () => {
+    downloadText(`docnest-backup-${new Date().toISOString().slice(0, 10)}.json`, serializeBackup(state), 'application/json')
+    showToast('Backup downloaded — it holds every workspace, page and snapshot.')
+  }
+
+  const importBackup = (file: File) => {
+    const reader = new FileReader()
+    reader.onload = () => {
+      const result = parseBackup(String(reader.result ?? ''))
+      if (!result.ok) {
+        showToast(`Could not import: ${BACKUP_ERROR_MESSAGES[result.error]}`)
+        return
+      }
+      if (window.confirm('Replace everything with this backup? Your current docs will be overwritten.')) {
+        setState(result.state)
+        showToast('Backup restored.')
+      }
+    }
+    reader.readAsText(file)
   }
 
   const exportWorkspace = () => {
