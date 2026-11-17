@@ -72,3 +72,10 @@ npm run smoke # build + serve + verify the app shell and bundle
 ```
 
 Requires Node 24 (see `.nvmrc`). No environment variables, no secrets, no backend to configure — just open the page and write.
+
+## Data & privacy
+
+- Everything is stored under the `docnest-state-v1` key in `localStorage`. Clearing browser data for the site wipes it — export a backup first.
+- **Backup / Restore** (sidebar footer): download a JSON file with every workspace, page and snapshot, and restore it later. Backups are validated on import (wrong app, wrong version or malformed state are rejected with a clear message).
+- **Reset demo data** (sidebar footer): restores the three seeded workspaces.
+- Nothing leaves your machine unless you export it. There is no analytics, no account and no server call.
