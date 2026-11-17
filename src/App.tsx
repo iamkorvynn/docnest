@@ -303,7 +303,14 @@ export default function App() {
         onDeleteWorkspace={deleteWorkspace}
         onRoleChange={changeRole}
         onColorChange={(id, color) => setState((s) => ({ ...s, workspaces: s.workspaces.map((w) => (w.id === id ? { ...w, color } : w)) }))}
-        onSelectPage={(id) => { setState((s) => ({ ...s, activePageId: id })); setSidebarOpen(false) }}
+        onSelectPage={(id) => {
+          setState((s) => ({
+            ...s,
+            activePageId: id,
+            pages: s.pages.map((p) => (p.id === id ? { ...p, lastOpenedAt: Date.now() } : p)),
+          }))
+          setSidebarOpen(false)
+        }}
         onNewPage={(parentId) => createPage(parentId ?? null)}
         onNewPageFromTemplate={() => setTemplatesOpen(true)}
         onRenamePage={(id, title) => updatePages(state.pages.map((p) => (p.id === id ? { ...p, title, updatedAt: Date.now() } : p)))}
@@ -412,7 +419,7 @@ export default function App() {
           workspaceName={activeWorkspace.name}
           onOpen={(id) => {
             const page = state.pages.find((p) => p.id === id)
-            if (page) setState((s) => ({ ...s, activeWorkspaceId: page.workspaceId, activePageId: id }))
+            if (page) setState((s) => ({ ...s, activeWorkspaceId: page.workspaceId, activePageId: id, pages: s.pages.map((p) => (p.id === id ? { ...p, lastOpenedAt: Date.now() } : p)) }))
             setSidebarOpen(false)
           }}
           onClose={() => setSearchOpen(false)}
