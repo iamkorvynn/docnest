@@ -10,6 +10,7 @@ interface Props {
   onBlocksChange: (blocks: Block[]) => void
   onSaveSnapshot: () => void
   onIconChange?: (icon: string) => void
+  onCopyBlock?: (block: Block) => void
   onExit: () => void
 }
 
@@ -34,6 +35,7 @@ export default function FocusMode(props: Props) {
         onBlocksChange={props.onBlocksChange}
         onSaveSnapshot={props.onSaveSnapshot}
         onIconChange={props.onIconChange}
+        onCopyBlock={props.onCopyBlock}
       />
       <div className="focus-hint">
         Focus mode — nothing but the words. Your changes save automatically.

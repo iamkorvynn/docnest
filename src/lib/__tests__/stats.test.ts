@@ -20,7 +20,7 @@ describe('workspaceStats', () => {
     ]
     const stats = workspaceStats(WS, pages)
     expect(stats.pages).toBe(2)
-    expect(stats.words).toBe(5)
+    expect(stats.words).toBe(7) // hello world + done + open + three more words
     expect(stats.todosTotal).toBe(2)
     expect(stats.todosDone).toBe(1)
     expect(stats.favourites).toBe(1)
