@@ -41,12 +41,19 @@ export default function Sidebar(props: Props) {
   const [collapsed, setCollapsed] = useState<Set<string>>(new Set())
   const [menu, setMenu] = useState<{ x: number; y: number; page: Page } | null>(null)
   const [editingId, setEditingId] = useState<string | null>(null)
+  const [sortBy, setSortBy] = useState<'created' | 'title' | 'recent'>('created')
   const [editTitle, setEditTitle] = useState('')
 
-  const tree = useMemo(
-    () => flattenTree(pages, activeWorkspace.id),
-    [pages, activeWorkspace.id],
-  )
+  const tree = useMemo(() => {
+    const flat = flattenTree(pages, activeWorkspace.id)
+    if (sortBy === 'title') {
+      return [...flat].sort((a, b) => (a.page.title || 'Untitled').localeCompare(b.page.title || 'Untitled'))
+    }
+    if (sortBy === 'recent') {
+      return [...flat].sort((a, b) => (b.page.lastOpenedAt ?? b.page.updatedAt) - (a.page.lastOpenedAt ?? a.page.updatedAt))
+    }
+    return flat
+  }, [pages, activeWorkspace.id, sortBy])
   const favourites = pages.filter((p) => p.workspaceId === activeWorkspace.id && p.favourite && !p.trashed)
   const recent = pages
     .filter((p) => p.workspaceId === activeWorkspace.id && !p.trashed)
@@ -170,6 +177,16 @@ export default function Sidebar(props: Props) {
       <div className="sidebar-section">
         <div className="sidebar-label">
           Pages
+          <select
+            value={sortBy}
+            onChange={(e) => setSortBy(e.target.value as 'created' | 'title' | 'recent')}
+            title="Sort pages"
+            style={{ fontSize: 11, padding: '2px 4px', border: '1px solid var(--border)', borderRadius: 5, background: 'transparent', color: 'var(--text-dim)' }}
+          >
+            <option value="created">Created</option>
+            <option value="title">A–Z</option>
+            <option value="recent">Recent</option>
+          </select>
           <span>
             <button className="icon-btn" onClick={() => setCollapsed(new Set(tree.map(({ page }) => page.id)))} title="Collapse all">▸▸</button>
             <button className="icon-btn" onClick={() => setCollapsed(new Set())} title="Expand all">▾▾</button>
