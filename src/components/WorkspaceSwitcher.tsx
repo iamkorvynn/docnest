@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react'
 import type { Role, Workspace } from '../types'
 import { ROLE_DESCRIPTIONS, ROLE_LABELS, canManageWorkspace } from '../lib/permissions'
 import RoleBadge from './RoleBadge'
+import ConfirmDialog from './ConfirmDialog'
 
 interface Props {
   workspaces: Workspace[]
@@ -25,6 +26,7 @@ export default function WorkspaceSwitcher({ workspaces, active, onSelect, onCrea
   const [name, setName] = useState('')
   const [renaming, setRenaming] = useState(false)
   const [roleOpen, setRoleOpen] = useState(false)
+  const [confirmDelete, setConfirmDelete] = useState(false)
   const ref = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
@@ -149,11 +151,21 @@ export default function WorkspaceSwitcher({ workspaces, active, onSelect, onCrea
             className="danger"
             disabled={!canManageWorkspace(active.role)}
             title={canManageWorkspace(active.role) ? 'Delete this workspace' : 'Only the owner can delete the workspace'}
-            onClick={() => { if (window.confirm(`Delete workspace “${active.name}” and all its pages?`)) { onDelete(active.id); setOpen(false) } }}
+            onClick={() => setConfirmDelete(true)}
           >
             🗑 Delete workspace
           </button>
         </div>
+      )}
+      {confirmDelete && (
+        <ConfirmDialog
+          title="Delete this workspace?"
+          message={`Delete “${active.name}” and all its pages? This cannot be undone.`}
+          confirmLabel="Delete workspace"
+          danger
+          onConfirm={() => { onDelete(active.id); setConfirmDelete(false); setOpen(false) }}
+          onCancel={() => setConfirmDelete(false)}
+        />
       )}
     </div>
   )
