@@ -41,3 +41,32 @@ Components are organised by screen area: `Sidebar` (tree + switcher),
 `Editor` + `BlockRow` (editing), `TopBar` (actions), and one component per
 overlay (`SearchModal`, `TemplatesModal`, `VersionHistory`, `FocusMode`,
 `TrashPanel`, `ShortcutsModal`, `ConfirmDialog`, `ContextMenu`).
+
+## Data flow
+
+```
+user action
+  → component handler (e.g. Editor.onBlocksChange)
+  → App handler (permission check first, e.g. readOnly guard)
+  → lib pure function returns new arrays (blocks/tree/versions)
+  → setState(new DocNestState)
+  → useEffect persists to localStorage
+  → useEffect syncs #/page/<id> hash + document.title
+```
+
+Notable flows:
+
+- **Editing a block:** `BlockRow` → `Editor` applies `updateBlockText` /
+  `splitBlock` / `mergeBlockWithPrevious` → `App.updateBlocks` stamps
+  `updatedAt`. No debouncing: state is the source of truth and persistence
+  is a cheap synchronous write.
+- **Leaving a page:** an effect on `activePageId` snapshots the previous
+  page first if `pageDiffersFromLatest` says it changed. A 5-minute interval
+  does the same for the active page. Restoring snapshots the current version
+  first, so restore is never destructive.
+- **Roles:** `activeWorkspace.role` flows into `readOnly`; `Editor` and
+  `BlockRow` disable inputs, `Sidebar` disables creation actions, and the
+  top bar shows a banner listing exactly what is blocked.
+- **Deep links:** on load, `pageIdFromHash` opens the linked page; on every
+  page change the hash is replaced; `hashchange` (back/forward) opens the
+  linked page. Unknown ids are ignored.
