@@ -299,7 +299,9 @@ a { color: var(--accent-strong); }
   border: 1px solid var(--border); border-bottom-width: 2px;
   border-radius: 4px; padding: 1px 5px;
 }
+.hamburger { display: none; }
 @media (max-width: 760px) {
+  .hamburger { display: inline-block; }
   .sidebar { position: fixed; z-index: 30; height: 100%; transform: translateX(-100%); transition: transform 0.2s; }
   .sidebar.open { transform: translateX(0); }
   .editor { padding: 24px 20px 100px; }

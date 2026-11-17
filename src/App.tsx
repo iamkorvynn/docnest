@@ -244,7 +244,7 @@ export default function App() {
 
       <div className="main">
         <div className="topbar">
-          <button className="icon-btn" onClick={() => setSidebarOpen((v) => !v)} title="Toggle sidebar" style={{ display: 'none' }}>☰</button>
+          <button className="icon-btn hamburger" onClick={() => setSidebarOpen((v) => !v)} title="Toggle sidebar">☰</button>
           <div className="crumbs">
             <span>{activeWorkspace.icon} {activeWorkspace.name}</span>
             {crumbs.map((c, i) => (
