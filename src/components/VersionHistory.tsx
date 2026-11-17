@@ -23,7 +23,7 @@ export default function VersionHistory({ page, versions, onRestore, onDelete, on
     <div className="history-panel">
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
         <div>
-          <h2>Version history</h2>
+          <h2>Version history ({snaps.length})</h2>
           <p className="sub" style={{ margin: '2px 0 0' }}>{page.icon} {page.title || 'Untitled'}</p>
         </div>
         <button className="icon-btn" onClick={onClose} title="Close history">✕</button>
