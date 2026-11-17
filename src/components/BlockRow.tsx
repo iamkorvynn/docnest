@@ -28,6 +28,7 @@ const PLACEHOLDERS: Partial<Record<BlockType, string>> = {
   todo: 'To-do',
   code: '// code…',
   quote: 'Quote',
+  callout: 'Callout — a highlighted note',
 }
 
 /** One editable block row: the text input plus hover tools (type, move, duplicate, delete). */
@@ -123,7 +124,7 @@ export default function BlockRow(props: Props) {
     )
   }
 
-  const inputClass = `block-input ${block.type === 'h1' ? 'h1' : block.type === 'h2' ? 'h2' : block.type === 'h3' ? 'h3' : block.type === 'quote' ? 'quote' : block.type === 'code' ? 'code' : ''}`
+  const inputClass = `block-input ${block.type === 'h1' ? 'h1' : block.type === 'h2' ? 'h2' : block.type === 'h3' ? 'h3' : block.type === 'quote' ? 'quote' : block.type === 'code' ? 'code' : block.type === 'callout' ? 'callout' : ''}`
 
   const input = (
     <textarea
@@ -138,6 +139,40 @@ export default function BlockRow(props: Props) {
       aria-label={BLOCK_LABELS[block.type]}
     />
   )
+
+  if (block.type === 'callout') {
+    return (
+      <div className="block-row">
+        <div className="block-tools">
+          {!readOnly && (
+            <>
+              <button title="Change block type" onClick={() => setTypeMenuOpen((v) => !v)}>⋮</button>
+              <button title="Move up (Alt+↑)" onClick={() => props.onMove(block.id, -1)}>↑</button>
+              <button title="Move down (Alt+↓)" onClick={() => props.onMove(block.id, 1)}>↓</button>
+              <button title="Duplicate block" onClick={() => props.onDuplicate(block.id)}>⧉</button>
+              <button title="Delete block" onClick={() => props.onDelete(block.id)}>✕</button>
+            </>
+          )}
+        </div>
+        <div className="block-body">
+          <div className="block-callout">
+            <span aria-hidden>💡</span>
+            <textarea
+              ref={taRef}
+              className="block-input"
+              value={block.text}
+              placeholder="A highlighted note…"
+              disabled={readOnly}
+              rows={1}
+              onChange={(e) => props.onTextChange(block.id, e.target.value)}
+              onKeyDown={onKeyDown}
+              aria-label="Callout"
+            />
+          </div>
+        </div>
+      </div>
+    )
+  }
 
   let body: React.ReactNode
   if (block.type === 'bulleted') {
