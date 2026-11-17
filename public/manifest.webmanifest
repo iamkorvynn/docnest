@@ -1,0 +1,12 @@
+{
+  "name": "DocNest",
+  "short_name": "DocNest",
+  "description": "A local-first workspace app. Block editor, page tree, roles, focus mode and version history. No account, no backend.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#fafaf8",
+  "theme_color": "#d97706",
+  "icons": [
+    { "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml" }
+  ]
+}
