@@ -8,3 +8,17 @@
 No account. No backend. No tracking. Your workspaces, pages and version history live in your browser's `localStorage`, and you can take them with you as Markdown or a JSON backup any time.
 
 > A doc is a nest: small pieces, woven together, that hold something bigger.
+
+## Features
+
+- **Workspaces** — create, rename, delete and switch between workspaces; each has its own colour and icon.
+- **Block editor** — paragraph, H1/H2/H3, bulleted and numbered lists, to-do checkboxes, code blocks, quotes, callouts, dividers and image placeholders. Press `Enter` to split a block, `Backspace` at the start to merge, `Alt+↑/↓` to move it, or type `/` to turn it into any other block type.
+- **Nested pages** — nest any page under another from the sidebar menu, drag-free. Collapse, expand, sort (created / A–Z / recent).
+- **Sidebar page tree** — favourites, recent pages, page counts, and a context menu per page (rename, change icon, duplicate, nest, move to another workspace, trash).
+- **Full-text search** — `⌘/Ctrl+K` searches titles and block content across all workspaces, title matches first, with highlighted matches and excerpts. Filter to the current workspace with one checkbox.
+- **Templates** — blank, meeting notes, project plan, reading list, daily journal, weekly review and book notes, each with a live preview.
+- **Trash + restore** — trashed pages (and their subtrees) can be restored, restored all at once, or deleted forever.
+- **Export** — any page as Markdown (download or copy to clipboard), a whole workspace as one Markdown file, or everything as a JSON backup you can restore later.
+- **Deep links** — every page has a `#/page/<id>` link; copy it from the top bar, and back/forward in the browser navigates between pages.
+- **Dark mode** — persisted, and follows your system preference on first run.
+- **Reading progress bar, word count, reading time, to-do progress, created/edited dates** on every page.
