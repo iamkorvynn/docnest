@@ -321,6 +321,7 @@ export default function App() {
               onTitleChange={updateTitle}
               onBlocksChange={updateBlocks}
               onSaveSnapshot={() => saveSnapshot()}
+              onIconChange={(icon) => updatePages(state.pages.map((p) => (p.id === activePage.id ? { ...p, icon, updatedAt: Date.now() } : p)))}
             />
           ) : (
             <div className="empty-state">
@@ -384,6 +385,7 @@ export default function App() {
           onTitleChange={updateTitle}
           onBlocksChange={updateBlocks}
           onSaveSnapshot={() => saveSnapshot()}
+          onIconChange={(icon) => updatePages(state.pages.map((p) => (p.id === activePage.id ? { ...p, icon, updatedAt: Date.now() } : p)))}
           onExit={() => setFocusOpen(false)}
         />
       )}

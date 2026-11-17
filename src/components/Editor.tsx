@@ -18,6 +18,8 @@ import {
 } from '../lib/blocks'
 import BlockRow from './BlockRow'
 
+export const PAGE_ICONS = ['📄', '📝', '📕', '📗', '📘', '🗺️', '🚀', '🎵', '💡', '🗓️', '✅', '🧩', '🔍', '✍️', '📚', '🏢', '👋', '🪹', '⭐', '🎯']
+
 interface Props {
   page: Page
   readOnly: boolean
@@ -25,10 +27,16 @@ interface Props {
   onTitleChange: (title: string) => void
   onBlocksChange: (blocks: Block[]) => void
   onSaveSnapshot: () => void
+  onIconChange?: (icon: string) => void
 }
 
 /** The document editor: title, block list, add-block menu, word count. */
-export default function Editor({ page, readOnly, focus, onTitleChange, onBlocksChange, onSaveSnapshot }: Props) {
+export default function Editor({ page, readOnly, focus, onTitleChange, onBlocksChange, onSaveSnapshot, onIconChange }: Props) {
+  const cycleIcon = () => {
+    if (readOnly || !onIconChange) return
+    const idx = PAGE_ICONS.indexOf(page.icon)
+    onIconChange(PAGE_ICONS[(idx + 1) % PAGE_ICONS.length])
+  }
   const [addMenuOpen, setAddMenuOpen] = useState(false)
   const [focusBlockId, setFocusBlockId] = useState<string | null>(null)
   const titleRef = useRef<HTMLTextAreaElement>(null)
@@ -76,7 +84,9 @@ export default function Editor({ page, readOnly, focus, onTitleChange, onBlocksC
   return (
     <div className={`editor ${focus ? 'focus' : ''}`}>
       <div className="doc-icon-row">
-        <span className="doc-icon" title="Page icon">{page.icon}</span>
+        <button className="doc-icon" title={readOnly ? 'Page icon' : 'Click to change the page icon'} onClick={cycleIcon} style={{ cursor: readOnly ? 'default' : 'pointer' }}>
+          {page.icon}
+        </button>
       </div>
       <textarea
         ref={titleRef}
