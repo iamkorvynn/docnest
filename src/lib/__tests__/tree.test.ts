@@ -116,3 +116,13 @@ describe('movePageToWorkspace', () => {
     expect(movePageToWorkspace(pages, 'nope', 'ws-2')).toEqual(pages)
   })
 })
+
+describe('sibling sorting', () => {
+  it('sorts siblings by title without breaking nesting', async () => {
+    const { flattenTree, compareByTitle } = await import('../tree')
+    const pages = [page('a', null, 'Zebra'), page('b', 'a', 'Apple'), page('c', null, 'Mango')]
+    const out = flattenTree(pages, WS, compareByTitle)
+    expect(out.map(({ page: p }) => p.id)).toEqual(['c', 'a', 'b'])
+    expect(out.find((x) => x.page.id === 'b')!.depth).toBe(1)
+  })
+})
