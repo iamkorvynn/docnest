@@ -164,7 +164,11 @@ export default function Sidebar(props: Props) {
       <div className="sidebar-section">
         <div className="sidebar-label">
           Pages
-          <button className="icon-btn" onClick={() => props.onNewPage(null)} disabled={!canEdit} title="New page">＋</button>
+          <span>
+            <button className="icon-btn" onClick={() => setCollapsed(new Set(tree.map(({ page }) => page.id)))} title="Collapse all">▸▸</button>
+            <button className="icon-btn" onClick={() => setCollapsed(new Set())} title="Expand all">▾▾</button>
+            <button className="icon-btn" onClick={() => props.onNewPage(null)} disabled={!canEdit} title="New page">＋</button>
+          </span>
         </div>
         {visibleTree.length === 0 && <div style={{ fontSize: 13, color: 'var(--text-dim)', padding: '4px 8px' }}>No pages yet — create your first one.</div>}
         {visibleTree.map(({ page, depth }) => {
