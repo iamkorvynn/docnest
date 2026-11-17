@@ -147,12 +147,17 @@ export default function App() {
       } else if (mod && e.shiftKey && e.key.toLowerCase() === 'f') {
         e.preventDefault()
         setFocusOpen((v) => !v)
+      } else if (e.key === 'Escape') {
+        setSidebarOpen(false)
       } else if (e.key === '?' && !mod) {
         const target = e.target as HTMLElement
         if (target.tagName !== 'INPUT' && target.tagName !== 'TEXTAREA') setShortcutsOpen((v) => !v)
       } else if (mod && e.key.toLowerCase() === 's') {
         e.preventDefault()
         saveSnapshotRef.current()
+      } else if (mod && e.key.toLowerCase() === 'n') {
+        e.preventDefault()
+        if (canCreatePage(activeWorkspace.role)) createPage(null)
       }
     }
     window.addEventListener('keydown', onKey)
