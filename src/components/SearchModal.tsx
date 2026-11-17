@@ -7,12 +7,13 @@ interface Props {
   pages: Page[]
   workspaceId?: string
   workspaceName?: string
+  workspaceNames?: Record<string, string>
   onOpen: (pageId: string) => void
   onClose: () => void
 }
 
 /** ⌘K palette: full-text search across titles and block content. */
-export default function SearchModal({ pages, workspaceId, workspaceName, onOpen, onClose }: Props) {
+export default function SearchModal({ pages, workspaceId, workspaceName, workspaceNames, onOpen, onClose }: Props) {
   const [onlyCurrent, setOnlyCurrent] = useState(false)
   const [query, setQuery] = useState('')
   const [selected, setSelected] = useState(0)
@@ -67,7 +68,7 @@ export default function SearchModal({ pages, workspaceId, workspaceName, onOpen,
           {results.map((r, i) => (
             <button key={r.page.id} className={`search-result ${i === selected ? 'selected' : ''}`} onClick={() => { onOpen(r.page.id); onClose() }} onMouseEnter={() => setSelected(i)}>
               <div className="r-tag">{r.matchIn === 'title' ? 'Title match' : r.matchIn === 'both' ? 'Title + content' : 'Content match'}</div>
-              <div style={{ fontSize: 11, color: 'var(--text-faint)' }}>in workspace {r.page.workspaceId.slice(0, 8)}…</div>
+              <div style={{ fontSize: 11, color: 'var(--text-faint)' }}>in {workspaceNames?.[r.page.workspaceId] ?? 'a workspace'}</div>
               <div className="r-title">{r.page.icon} <Highlight text={r.page.title || 'Untitled'} query={query} /></div>
               <div className="r-excerpt"><Highlight text={r.excerpt} query={query} /></div>
             </button>

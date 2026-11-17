@@ -456,6 +456,7 @@ export default function App() {
           pages={state.pages}
           workspaceId={activeWorkspace.id}
           workspaceName={activeWorkspace.name}
+          workspaceNames={Object.fromEntries(state.workspaces.map((w) => [w.id, w.name]))}
           onOpen={(id) => {
             const page = state.pages.find((p) => p.id === id)
             if (page) setState((s) => ({ ...s, activeWorkspaceId: page.workspaceId, activePageId: id, pages: s.pages.map((p) => (p.id === id ? { ...p, lastOpenedAt: Date.now() } : p)) }))
