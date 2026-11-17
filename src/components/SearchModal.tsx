@@ -5,17 +5,22 @@ import { searchPages } from '../lib/search'
 interface Props {
   pages: Page[]
   workspaceId?: string
+  workspaceName?: string
   onOpen: (pageId: string) => void
   onClose: () => void
 }
 
 /** ⌘K palette: full-text search across titles and block content. */
-export default function SearchModal({ pages, workspaceId, onOpen, onClose }: Props) {
+export default function SearchModal({ pages, workspaceId, workspaceName, onOpen, onClose }: Props) {
+  const [onlyCurrent, setOnlyCurrent] = useState(false)
   const [query, setQuery] = useState('')
   const [selected, setSelected] = useState(0)
   const inputRef = useRef<HTMLInputElement>(null)
 
-  const results = useMemo(() => searchPages(pages, query, workspaceId), [pages, query, workspaceId])
+  const results = useMemo(
+    () => searchPages(pages, query, onlyCurrent ? workspaceId : undefined),
+    [pages, query, workspaceId, onlyCurrent],
+  )
 
   useEffect(() => {
     inputRef.current?.focus()
@@ -49,6 +54,12 @@ export default function SearchModal({ pages, workspaceId, onOpen, onClose }: Pro
           }}
           aria-label="Search docs"
         />
+        {workspaceId && (
+          <label style={{ display: 'flex', gap: 6, alignItems: 'center', fontSize: 13, marginTop: 10, cursor: 'pointer' }}>
+            <input type="checkbox" checked={onlyCurrent} onChange={(e) => setOnlyCurrent(e.target.checked)} />
+            Only in “{workspaceName ?? 'this workspace'}”
+          </label>
+        )}
         <div style={{ marginTop: 10 }}>
           {query.trim() === '' && <p className="sub">Type to search across every workspace — titles rank first, then content.</p>}
           {query.trim() !== '' && results.length === 0 && <p className="sub">No docs match “{query}”.</p>}

@@ -409,6 +409,8 @@ export default function App() {
       {searchOpen && (
         <SearchModal
           pages={state.pages}
+          workspaceId={activeWorkspace.id}
+          workspaceName={activeWorkspace.name}
           onOpen={(id) => {
             const page = state.pages.find((p) => p.id === id)
             if (page) setState((s) => ({ ...s, activeWorkspaceId: page.workspaceId, activePageId: id }))
