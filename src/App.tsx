@@ -346,6 +346,14 @@ export default function App() {
         onNewPage={(parentId) => createPage(parentId ?? null)}
         onNewPageFromTemplate={() => setTemplatesOpen(true)}
         onRenamePage={(id, title) => updatePages(state.pages.map((p) => (p.id === id ? { ...p, title, updatedAt: Date.now() } : p)))}
+        onCyclePageIcon={(id) => {
+          // Reuse the editor's icon set: cycle to the next one.
+          const page = state.pages.find((p) => p.id === id)
+          if (!page) return
+          const icons = ['📄', '📝', '📕', '📗', '📘', '🗺️', '🚀', '🎵', '💡', '🗓️', '✅', '🧩', '🔍', '✍️', '📚', '🏢', '👋', '🪹', '⭐', '🎯']
+          const next = icons[(icons.indexOf(page.icon) + 1) % icons.length]
+          updatePages(state.pages.map((p) => (p.id === id ? { ...p, icon: next, updatedAt: Date.now() } : p)))
+        }}
         onToggleFavourite={(id) => updatePages(state.pages.map((p) => (p.id === id ? { ...p, favourite: !p.favourite } : p)))}
         onDuplicatePage={(id) => {
           if (!canEdit(activeWorkspace.role)) { showToast('Viewers cannot duplicate pages.'); return }

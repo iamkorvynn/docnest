@@ -22,6 +22,7 @@ interface Props {
   onNewPage: (parentId?: string | null) => void
   onNewPageFromTemplate: () => void
   onRenamePage: (id: string, title: string) => void
+  onCyclePageIcon: (id: string) => void
   onToggleFavourite: (id: string) => void
   onDuplicatePage: (id: string) => void
   onNestPage: (id: string, parentId: string | null) => void
@@ -86,6 +87,7 @@ export default function Sidebar(props: Props) {
     const siblings = pages.filter((p) => p.workspaceId === page.workspaceId && p.parentId === null && p.id !== page.id && !p.trashed)
     const items: MenuItem[] = [
       { label: 'Rename', icon: '✏️', disabled: !canEdit, onClick: () => { setEditingId(page.id); setEditTitle(page.title) } },
+      { label: 'Change icon', icon: '🎨', disabled: !canEdit, onClick: () => props.onCyclePageIcon(page.id) },
       { label: page.favourite ? 'Remove from favourites' : 'Add to favourites', icon: '⭐', onClick: () => props.onToggleFavourite(page.id) },
       { label: 'Duplicate', icon: '📄', disabled: !canEdit, onClick: () => props.onDuplicatePage(page.id) },
       { label: 'New sub-page', icon: '＋', disabled: !canEdit, onClick: () => props.onNewPage(page.id) },
