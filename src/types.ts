@@ -9,6 +9,7 @@ export type BlockType =
   | 'todo'
   | 'code'
   | 'quote'
+  | 'callout'
   | 'divider'
   | 'image'
 
