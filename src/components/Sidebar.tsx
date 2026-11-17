@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react'
 import type { Page, Workspace } from '../types'
 import { flattenTree, getChildren } from '../lib/tree'
 import { canCreatePage, canDeletePage } from '../lib/permissions'
+import { workspaceStats } from '../lib/stats'
 import WorkspaceSwitcher from './WorkspaceSwitcher'
 import ContextMenu, { type MenuItem } from './ContextMenu'
 import type { Role } from '../types'
@@ -49,6 +50,7 @@ export default function Sidebar(props: Props) {
     .sort((a, b) => b.updatedAt - a.updatedAt)
     .slice(0, 4)
   const trashedCount = pages.filter((p) => p.workspaceId === activeWorkspace.id && p.trashed).length
+  const stats = workspaceStats(activeWorkspace, pages)
   const canEdit = canCreatePage(activeWorkspace.role)
 
   const toggleCollapse = (id: string) => {
@@ -215,6 +217,10 @@ export default function Sidebar(props: Props) {
       </div>
 
       <div style={{ flex: 1 }} />
+      <div style={{ fontSize: 11.5, color: 'var(--text-dim)', padding: '8px', lineHeight: 1.6, borderTop: '1px solid var(--border)' }}>
+        {stats.pages} pages · {stats.words} words
+        {stats.todosTotal > 0 && <> · ✓ {stats.todosDone}/{stats.todosTotal} to-dos</>}
+      </div>
       <div style={{ fontSize: 11.5, color: 'var(--text-faint)', padding: '8px', lineHeight: 1.5 }}>
         Local-first — your docs live in this browser only.
         <br />
