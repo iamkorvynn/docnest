@@ -1,5 +1,4 @@
 import type { Page, Role, Workspace } from '../types'
-import { blockedActions } from '../lib/permissions'
 import RoleBadge from './RoleBadge'
 
 interface Props {

@@ -19,7 +19,7 @@ import VersionHistory from './components/VersionHistory'
 import FocusMode from './components/FocusMode'
 import TrashPanel from './components/TrashPanel'
 import ShortcutsModal from './components/ShortcutsModal'
-import RoleBadge from './components/RoleBadge'
+import TopBar from './components/TopBar'
 
 export default function App() {
   const [state, setState] = useState<DocNestState>(() => {
@@ -267,6 +267,26 @@ export default function App() {
     showToast(`Your role is now ${role}. ${role === 'viewer' ? 'Editing is disabled.' : role === 'editor' ? 'You can edit, but not manage roles.' : 'You have full control.'}`)
   }
 
+  const copyPageMarkdown = async () => {
+    if (!activePage) return
+    try {
+      await navigator.clipboard.writeText(pageToMarkdown(activePage))
+      showToast('Markdown copied to clipboard.')
+    } catch {
+      showToast('Clipboard blocked — use the .md download instead.')
+    }
+  }
+
+  const copyPageLink = async () => {
+    if (!activePage) return
+    try {
+      await navigator.clipboard.writeText(pageUrl(activePage.id))
+      showToast('Link copied — it opens this page in DocNest.')
+    } catch {
+      showToast('Clipboard blocked — copy the URL from the address bar.')
+    }
+  }
+
   return (
     <div className="app">
       <Sidebar
@@ -318,63 +338,22 @@ export default function App() {
       />
 
       <div className="main">
-        <div className="topbar">
-          <button className="icon-btn hamburger" onClick={() => setSidebarOpen((v) => !v)} title="Toggle sidebar">☰</button>
-          <div className="crumbs">
-            <span>{activeWorkspace.icon} {activeWorkspace.name}</span>
-            {crumbs.map((c, i) => (
-              <span key={c.id}> / {i === crumbs.length - 1 ? <b>{c.title || 'Untitled'}</b> : c.title || 'Untitled'}</span>
-            ))}
-          </div>
-          <RoleBadge role={activeWorkspace.role} />
-          <button className="btn" onClick={() => setTheme((t) => (t === 'dark' ? 'light' : 'dark'))} title="Toggle dark / light theme">
-            {theme === 'dark' ? '☀️ Light' : '🌙 Dark'}
-          </button>
-          {activePage && (
-            <>
-              <button className="btn" onClick={() => setShortcutsOpen(true)} title="Keyboard shortcuts (?)">⌨ Shortcuts</button>
-          <button className="btn" onClick={() => setFocusOpen(true)} title="Distraction-free writing (Ctrl/⌘ Shift F)">◎ Focus</button>
-              <button className="btn" onClick={() => setHistoryOpen(true)} title="Browse and restore past versions">🕘 History</button>
-              <button className="btn" onClick={() => exportMarkdown(activePage)} title="Download this doc as Markdown">↓ .md</button>
-              <button
-                className="btn"
-                onClick={async () => {
-                  try {
-                    await navigator.clipboard.writeText(pageUrl(activePage.id))
-                    showToast('Link copied — it opens this page in DocNest.')
-                  } catch {
-                    showToast('Clipboard blocked — copy the URL from the address bar.')
-                  }
-                }}
-                title="Copy a link to this page"
-              >
-                🔗 Copy link
-              </button>
-              <button
-                className="btn"
-                onClick={async () => {
-                  try {
-                    await navigator.clipboard.writeText(pageToMarkdown(activePage))
-                    showToast('Markdown copied to clipboard.')
-                  } catch {
-                    showToast('Clipboard blocked — use the .md download instead.')
-                  }
-                }}
-                title="Copy this doc as Markdown"
-              >
-                ⧉ Copy .md
-              </button>
-              <button className="btn" onClick={exportWorkspace} title="Download the whole workspace as one Markdown file">⇩ Workspace</button>
-              <button
-                className="btn"
-                onClick={() => updatePages(state.pages.map((p) => (p.id === activePage.id ? { ...p, favourite: !p.favourite } : p)))}
-                title={activePage.favourite ? 'Remove from favourites' : 'Add to favourites'}
-              >
-                {activePage.favourite ? '★' : '☆'}
-              </button>
-            </>
-          )}
-        </div>
+        <TopBar
+          workspace={activeWorkspace}
+          crumbs={crumbs}
+          activePage={activePage}
+          theme={theme}
+          onToggleTheme={() => setTheme((t) => (t === 'dark' ? 'light' : 'dark'))}
+          onToggleSidebar={() => setSidebarOpen((v) => !v)}
+          onOpenShortcuts={() => setShortcutsOpen(true)}
+          onOpenFocus={() => setFocusOpen(true)}
+          onOpenHistory={() => setHistoryOpen(true)}
+          onExportPage={() => activePage && exportMarkdown(activePage)}
+          onCopyPageMarkdown={copyPageMarkdown}
+          onCopyLink={copyPageLink}
+          onExportWorkspace={exportWorkspace}
+          onToggleFavourite={() => activePage && updatePages(state.pages.map((p) => (p.id === activePage.id ? { ...p, favourite: !p.favourite } : p)))}
+        />
 
         {readOnly && (
           <div className="readonly-banner">
