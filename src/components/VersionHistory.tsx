@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import type { Page, VersionSnapshot } from '../types'
 import ConfirmDialog from './ConfirmDialog'
-import { snapshotsForPage } from '../lib/versions'
+import { diffSummary, snapshotsForPage } from '../lib/versions'
 import { blocksToPlainText } from '../lib/blocks'
 
 interface Props {
@@ -44,6 +44,11 @@ export default function VersionHistory({ page, versions, onRestore, onDelete, on
             <div style={{ fontSize: 12.5, color: 'var(--text-dim)', marginTop: 4 }}>
               {blocksToPlainText(s.blocks).slice(0, 110) || '(empty)'}
             </div>
+            {i < snaps.length - 1 && (
+              <div style={{ fontSize: 11.5, color: 'var(--accent-strong)', marginTop: 3 }}>
+                vs previous: {diffSummary(snaps[i + 1], s)}
+              </div>
+            )}
             <div className="v-actions">
               <button className="btn" onClick={() => setPendingRestore(s)}>
                 Restore this version
