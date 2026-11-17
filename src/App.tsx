@@ -19,6 +19,8 @@ import VersionHistory from './components/VersionHistory'
 import FocusMode from './components/FocusMode'
 import TrashPanel from './components/TrashPanel'
 import ShortcutsModal from './components/ShortcutsModal'
+import EmptyState from './components/EmptyState'
+import Toast from './components/Toast'
 import TopBar from './components/TopBar'
 
 export default function App() {
@@ -371,22 +373,13 @@ export default function App() {
               onSaveSnapshot={() => saveSnapshot()}
               onIconChange={(icon) => updatePages(state.pages.map((p) => (p.id === activePage.id ? { ...p, icon, updatedAt: Date.now() } : p)))}
             />
-          ) : (
-            <div className="empty-state">
-              <div className="big">🪹</div>
-              <h1>{activeWorkspace.name} is empty</h1>
-              <p>
-                {readOnly
-                  ? 'There are no pages in this workspace yet, and viewers cannot create them. Switch to the owner or editor workspace to start writing.'
-                  : 'Create your first page and start nesting ideas.'}
-              </p>
-              {!readOnly && (
-                <div style={{ display: 'flex', gap: 8, justifyContent: 'center', marginTop: 16 }}>
-                  <button className="btn primary" onClick={() => createPage(null)}>＋ New page</button>
-                  <button className="btn" onClick={() => setTemplatesOpen(true)}>From a template</button>
-                </div>
-              )}
-            </div>
+) : (
+            <EmptyState
+              workspace={activeWorkspace}
+              readOnly={readOnly}
+              onNewPage={() => createPage(null)}
+              onNewFromTemplate={() => setTemplatesOpen(true)}
+            />
           )}
         </div>
       </div>
@@ -447,7 +440,7 @@ export default function App() {
           onExit={() => setFocusOpen(false)}
         />
       )}
-      {toast && <div className="toast">{toast}</div>}
+      {toast && <Toast message={toast} />}
     </div>
   )
 }
