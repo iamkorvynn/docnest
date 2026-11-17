@@ -110,3 +110,10 @@ src/
     ShortcutsModal.tsx  Highlight.tsx  EmptyState.tsx  Toast.tsx
   lib/__tests__/    # Vitest suites for every lib module
 ```
+
+## Tech & decisions
+
+- **Vite 6 + React 18 + TypeScript (strict)** — minimal dependencies on purpose: `react`, `react-dom`, `vite`, `typescript`, `vitest`. No UI kit, no state library; the state is one plain object in `App` persisted with an effect.
+- **Local-first, not offline-first** — there is no sync layer at all. That is a deliberate scope choice: the app is fully usable with zero setup, and the JSON backup is the portability story.
+- **Roles are a demo of the permission model**, not real multi-user auth — the role switcher lives in the workspace menu so you can try every permission set in one session. The checks themselves (`src/lib/permissions.ts`) are real and unit-tested; a future backend would enforce the same matrix server-side.
+- **Snapshots are full copies, not diffs** — simple, robust, and cheap at this scale; capped at 20 per page.
