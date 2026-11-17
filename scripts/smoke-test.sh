@@ -14,5 +14,6 @@ HTML="$(curl -fsS "http://localhost:$PORT/")"
 echo "$HTML" | grep -q 'id="root"' || { echo "FAIL: no #root in index.html"; exit 1; }
 echo "$HTML" | grep -q 'assets/index-.*\.js' || { echo "FAIL: no JS bundle referenced"; exit 1; }
 BUNDLE="$(echo "$HTML" | grep -o 'assets/index-[^"]*\.js' | head -1)"
-curl -fsS "http://localhost:$PORT/$BUNDLE" | grep -q 'DocNest' || { echo "FAIL: bundle does not contain the app"; exit 1; }
+curl -fsS -o /tmp/docnest-smoke-bundle.js "http://localhost:$PORT/$BUNDLE"
+grep -q 'DocNest' /tmp/docnest-smoke-bundle.js || { echo "FAIL: bundle does not contain the app"; exit 1; }
 echo "SMOKE OK: preview serves the app shell and bundle on :$PORT"
