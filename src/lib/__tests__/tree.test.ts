@@ -100,3 +100,19 @@ describe('getPagePath', () => {
     expect(getPagePath(pages, 'c').map((p) => p.id)).toEqual(['a', 'b', 'c'])
   })
 })
+
+describe('movePageToWorkspace', () => {
+  it('moves a page and its subtree to another workspace as top-level', async () => {
+    const { movePageToWorkspace } = await import('../tree')
+    const pages = [page('a', null), page('b', 'a')]
+    const out = movePageToWorkspace(pages, 'a', 'ws-2')
+    expect(out.find((p) => p.id === 'a')!.workspaceId).toBe('ws-2')
+    expect(out.find((p) => p.id === 'b')!.workspaceId).toBe('ws-2')
+    expect(out.find((p) => p.id === 'a')!.parentId).toBeNull()
+  })
+  it('is a no-op for an unknown page', async () => {
+    const { movePageToWorkspace } = await import('../tree')
+    const pages = [page('a', null)]
+    expect(movePageToWorkspace(pages, 'nope', 'ws-2')).toEqual(pages)
+  })
+})
