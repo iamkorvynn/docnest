@@ -1,4 +1,5 @@
 import { TEMPLATES } from '../lib/templates'
+import { blocksToPlainText } from '../lib/blocks'
 
 interface Props {
   onPick: (templateId: string) => void
@@ -18,6 +19,9 @@ export default function TemplatesModal({ onPick, onClose }: Props) {
               <div className="t-icon">{t.icon}</div>
               <div className="t-name">{t.name}</div>
               <div className="t-desc">{t.description}</div>
+              <div style={{ fontSize: 11.5, color: 'var(--text-faint)', marginTop: 6, lineHeight: 1.5 }}>
+                {blocksToPlainText(t.blocks()).split('\n').filter(Boolean).slice(0, 3).join(' · ')}
+              </div>
             </button>
           ))}
         </div>
