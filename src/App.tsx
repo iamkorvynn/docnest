@@ -285,6 +285,8 @@ export default function App() {
         }}
         onOpenSearch={() => setSearchOpen(true)}
         onOpenTrash={() => setTrashOpen(true)}
+        onExportBackup={exportBackup}
+        onImportBackup={importBackup}
         onResetDemo={() => {
           if (window.confirm('Reset DocNest to the demo workspaces? Your current docs will be replaced.')) {
             setState(resetState())

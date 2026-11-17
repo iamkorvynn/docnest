@@ -29,6 +29,8 @@ interface Props {
   onOpenSearch: () => void
   onOpenTrash: () => void
   onResetDemo: () => void
+  onExportBackup: () => void
+  onImportBackup: (file: File) => void
   sidebarOpen: boolean
   onCloseSidebar: () => void
 }
@@ -220,6 +222,15 @@ export default function Sidebar(props: Props) {
       <div style={{ fontSize: 11.5, color: 'var(--text-dim)', padding: '8px', lineHeight: 1.6, borderTop: '1px solid var(--border)' }}>
         {stats.pages} pages · {stats.words} words
         {stats.todosTotal > 0 && <> · ✓ {stats.todosDone}/{stats.todosTotal} to-dos</>}
+      </div>
+      <div style={{ padding: '4px 8px', display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+        <button className="btn" style={{ fontSize: 12, padding: '4px 9px' }} onClick={props.onExportBackup} title="Download a JSON backup of everything">
+          ⤓ Backup
+        </button>
+        <label className="btn" style={{ fontSize: 12, padding: '4px 9px', cursor: 'pointer' }} title="Restore from a DocNest JSON backup">
+          ⤒ Restore
+          <input type="file" accept="application/json,.json" hidden onChange={(e) => { const f = e.target.files?.[0]; if (f) props.onImportBackup(f); e.target.value = '' }} />
+        </label>
       </div>
       <div style={{ fontSize: 11.5, color: 'var(--text-faint)', padding: '8px', lineHeight: 1.5 }}>
         Local-first — your docs live in this browser only.
