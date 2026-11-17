@@ -29,3 +29,17 @@ Most note apps make you choose between writing and organising. DocNest does both
 
 - **Focus mode** (`⌘/Ctrl+Shift+F` or the `◎ Focus` button) — the whole screen becomes just your doc. No sidebar, no buttons, just words and a live word count. `Esc` brings you back.
 - **Version history** (`🕘 History`) — a timeline of snapshots for the current doc. DocNest snapshots automatically when you leave a changed page and every 5 minutes while you edit, and you can snapshot any time with `⌘/Ctrl+S` or the 📸 button. Each snapshot shows what changed vs the previous one (`+2 blocks`, `title changed`), and restoring one snapshots your current version first — so restore is never destructive.
+
+## Roles — they actually change the UI
+
+Every workspace has a role for you: **owner**, **editor** or **viewer**. Switch it from the workspace menu (👤 Switch my role) and watch the app change:
+
+| | Owner | Editor | Viewer |
+|---|:---:|:---:|:---:|
+| Read, search, export | ✅ | ✅ | ✅ |
+| Create / edit / duplicate pages | ✅ | ✅ | ❌ |
+| Trash / restore pages | ✅ | ✅ | ❌ |
+| Change roles | ✅ | ❌ | ❌ |
+| Rename / delete the workspace | ✅ | ❌ | ❌ |
+
+Viewers see a read-only banner explaining exactly what is blocked. The demo ships with three workspaces so you can feel all three roles at once: **My Nest** (owner), **Product Team** (editor) and **Company Handbook** (viewer).
