@@ -11,6 +11,7 @@ import { BACKUP_ERROR_MESSAGES, parseBackup, serializeBackup } from './lib/backu
 import { pageIdFromHash, pageLink, pageUrl } from './lib/links'
 import { blockedActions, canCreatePage, canDeletePage, canEdit, canManageRoles, canManageWorkspace } from './lib/permissions'
 import { uid } from './lib/id'
+import { nextIcon } from './lib/icons'
 import Sidebar from './components/Sidebar'
 import Editor from './components/Editor'
 import SearchModal from './components/SearchModal'
@@ -347,12 +348,9 @@ export default function App() {
         onNewPageFromTemplate={() => setTemplatesOpen(true)}
         onRenamePage={(id, title) => updatePages(state.pages.map((p) => (p.id === id ? { ...p, title, updatedAt: Date.now() } : p)))}
         onCyclePageIcon={(id) => {
-          // Reuse the editor's icon set: cycle to the next one.
           const page = state.pages.find((p) => p.id === id)
           if (!page) return
-          const icons = ['📄', '📝', '📕', '📗', '📘', '🗺️', '🚀', '🎵', '💡', '🗓️', '✅', '🧩', '🔍', '✍️', '📚', '🏢', '👋', '🪹', '⭐', '🎯']
-          const next = icons[(icons.indexOf(page.icon) + 1) % icons.length]
-          updatePages(state.pages.map((p) => (p.id === id ? { ...p, icon: next, updatedAt: Date.now() } : p)))
+          updatePages(state.pages.map((p) => (p.id === id ? { ...p, icon: nextIcon(page.icon), updatedAt: Date.now() } : p)))
         }}
         onToggleFavourite={(id) => updatePages(state.pages.map((p) => (p.id === id ? { ...p, favourite: !p.favourite } : p)))}
         onDuplicatePage={(id) => {

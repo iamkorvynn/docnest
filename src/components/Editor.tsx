@@ -18,7 +18,8 @@ import {
 } from '../lib/blocks'
 import BlockRow from './BlockRow'
 
-export const PAGE_ICONS = ['📄', '📝', '📕', '📗', '📘', '🗺️', '🚀', '🎵', '💡', '🗓️', '✅', '🧩', '🔍', '✍️', '📚', '🏢', '👋', '🪹', '⭐', '🎯']
+export { PAGE_ICONS } from '../lib/icons'
+import { nextIcon } from '../lib/icons'
 
 interface Props {
   page: Page
@@ -35,8 +36,7 @@ interface Props {
 export default function Editor({ page, readOnly, focus, onTitleChange, onBlocksChange, onSaveSnapshot, onIconChange, onCopyBlock }: Props) {
   const cycleIcon = () => {
     if (readOnly || !onIconChange) return
-    const idx = PAGE_ICONS.indexOf(page.icon)
-    onIconChange(PAGE_ICONS[(idx + 1) % PAGE_ICONS.length])
+    onIconChange(nextIcon(page.icon))
   }
   const [addMenuOpen, setAddMenuOpen] = useState(false)
   const [focusBlockId, setFocusBlockId] = useState<string | null>(null)
