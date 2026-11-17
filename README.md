@@ -117,3 +117,11 @@ src/
 - **Local-first, not offline-first** — there is no sync layer at all. That is a deliberate scope choice: the app is fully usable with zero setup, and the JSON backup is the portability story.
 - **Roles are a demo of the permission model**, not real multi-user auth — the role switcher lives in the workspace menu so you can try every permission set in one session. The checks themselves (`src/lib/permissions.ts`) are real and unit-tested; a future backend would enforce the same matrix server-side.
 - **Snapshots are full copies, not diffs** — simple, robust, and cheap at this scale; capped at 20 per page.
+
+## Troubleshooting / FAQ
+
+- **My docs disappeared** — did you clear site data, or open DocNest in a different browser/profile? Data lives in that browser's `localStorage` only. Restore from a JSON backup if you have one.
+- **I can't edit a page** — check the role badge in the top bar. Viewers are read-only by design; switch the role in the workspace menu (or open the page in the owner workspace).
+- **Search finds nothing** — search skips trashed pages. Restore the page from Trash first.
+- **A snapshot is missing** — snapshots are capped at 20 per page (oldest pruned first). Manual snapshots (`⌘/Ctrl+S`) count the same as automatic ones.
+- **The dev server won't start** — make sure you're on Node 24 (`node -v`) and run `npm install` again. The Vite proxy env vars (`http_proxy`/`https_proxy`) don't affect the local dev server.
