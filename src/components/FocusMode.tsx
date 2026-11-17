@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import type { Block, Page } from '../types'
+import { countWords } from '../lib/blocks'
 import Editor from './Editor'
 
 interface Props {
@@ -34,7 +35,11 @@ export default function FocusMode(props: Props) {
         onSaveSnapshot={props.onSaveSnapshot}
         onIconChange={props.onIconChange}
       />
-      <div className="focus-hint">Focus mode — nothing but the words. Your changes save automatically.</div>
+      <div className="focus-hint">
+        Focus mode — nothing but the words. Your changes save automatically.
+        <br />
+        {countWords(props.page.blocks)} words in this doc
+      </div>
     </div>
   )
 }
