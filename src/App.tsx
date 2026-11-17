@@ -8,6 +8,7 @@ import { addSnapshot, createSnapshot, deleteSnapshot, pageDiffersFromLatest, res
 import { markdownFilename, pageToMarkdown } from './lib/markdown'
 import { workspaceFilename, workspaceToMarkdown } from './lib/export'
 import { BACKUP_ERROR_MESSAGES, parseBackup, serializeBackup } from './lib/backup'
+import { pageIdFromHash, pageLink, pageUrl } from './lib/links'
 import { blockedActions, canCreatePage, canDeletePage, canEdit, canManageRoles, canManageWorkspace } from './lib/permissions'
 import { uid } from './lib/id'
 import Sidebar from './components/Sidebar'
@@ -20,7 +21,13 @@ import TrashPanel from './components/TrashPanel'
 import RoleBadge from './components/RoleBadge'
 
 export default function App() {
-  const [state, setState] = useState<DocNestState>(() => loadState())
+  const [state, setState] = useState<DocNestState>(() => {
+    const loaded = loadState()
+    const linkedId = pageIdFromHash(window.location.hash)
+    const linked = linkedId ? loaded.pages.find((p) => p.id === linkedId && !p.trashed) : undefined
+    if (!linked) return loaded
+    return { ...loaded, activeWorkspaceId: linked.workspaceId, activePageId: linked.id }
+  })
   const [searchOpen, setSearchOpen] = useState(false)
   const [templatesOpen, setTemplatesOpen] = useState(false)
   const [trashOpen, setTrashOpen] = useState(false)
@@ -57,6 +64,13 @@ export default function App() {
   useEffect(() => {
     saveState(state)
   }, [state])
+
+  // Keep the URL hash in sync so the current page is linkable.
+  useEffect(() => {
+    if (!state.activePageId) return
+    const link = pageLink(state.activePageId)
+    if (window.location.hash !== link) window.history.replaceState(null, '', link)
+  }, [state.activePageId])
 
   // Auto-snapshot the page we are leaving, if it changed since its last snapshot.
   useEffect(() => {
@@ -315,6 +329,20 @@ export default function App() {
               <button className="btn" onClick={() => setFocusOpen(true)} title="Distraction-free writing (Ctrl/⌘ Shift F)">◎ Focus</button>
               <button className="btn" onClick={() => setHistoryOpen(true)} title="Browse and restore past versions">🕘 History</button>
               <button className="btn" onClick={() => exportMarkdown(activePage)} title="Download this doc as Markdown">↓ .md</button>
+              <button
+                className="btn"
+                onClick={async () => {
+                  try {
+                    await navigator.clipboard.writeText(pageUrl(activePage.id))
+                    showToast('Link copied — it opens this page in DocNest.')
+                  } catch {
+                    showToast('Clipboard blocked — copy the URL from the address bar.')
+                  }
+                }}
+                title="Copy a link to this page"
+              >
+                🔗 Copy link
+              </button>
               <button
                 className="btn"
                 onClick={async () => {
