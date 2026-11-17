@@ -422,6 +422,12 @@ export default function App() {
           pages={state.pages}
           workspaceId={activeWorkspace.id}
           onRestore={(id) => { updatePages(restorePage(state.pages, id)); showToast('Page restored.') }}
+          onRestoreAll={() => {
+            let pages = state.pages
+            for (const p of state.pages.filter((x) => x.workspaceId === activeWorkspace.id && x.trashed)) pages = restorePage(pages, p.id)
+            updatePages(pages)
+            showToast('Everything in trash was restored.')
+          }}
           onDeleteForever={(id) => updatePages(permanentlyDeletePage(state.pages, id))}
           onEmptyTrash={() => {
             const ids = new Set(state.pages.filter((p) => p.workspaceId === activeWorkspace.id && p.trashed).map((p) => p.id))

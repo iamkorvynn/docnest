@@ -4,13 +4,14 @@ interface Props {
   pages: Page[]
   workspaceId: string
   onRestore: (id: string) => void
+  onRestoreAll: () => void
   onDeleteForever: (id: string) => void
   onEmptyTrash: () => void
   onClose: () => void
 }
 
 /** Trash: restore pages or delete them forever. */
-export default function TrashPanel({ pages, workspaceId, onRestore, onDeleteForever, onEmptyTrash, onClose }: Props) {
+export default function TrashPanel({ pages, workspaceId, onRestore, onRestoreAll, onDeleteForever, onEmptyTrash, onClose }: Props) {
   const trashed = pages.filter((p) => p.workspaceId === workspaceId && p.trashed)
 
   return (
@@ -29,9 +30,12 @@ export default function TrashPanel({ pages, workspaceId, onRestore, onDeleteFore
         ))}
         <div className="modal-actions">
           {trashed.length > 0 && (
-            <button className="btn danger" onClick={() => { if (window.confirm('Empty the trash? This permanently deletes all trashed pages.')) onEmptyTrash() }}>
-              Empty trash
-            </button>
+            <>
+              <button className="btn" onClick={onRestoreAll}>Restore all</button>
+              <button className="btn danger" onClick={() => { if (window.confirm('Empty the trash? This permanently deletes all trashed pages.')) onEmptyTrash() }}>
+                Empty trash
+              </button>
+            </>
           )}
           <button className="btn" onClick={onClose}>Close</button>
         </div>
