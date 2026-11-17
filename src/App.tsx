@@ -6,6 +6,7 @@ import { duplicatePage, getPagePath, nestPage, permanentlyDeletePage, restorePag
 import { getTemplate } from './lib/templates'
 import { addSnapshot, createSnapshot, pageDiffersFromLatest, restoreSnapshot } from './lib/versions'
 import { markdownFilename, pageToMarkdown } from './lib/markdown'
+import { workspaceFilename, workspaceToMarkdown } from './lib/export'
 import { blockedActions, canCreatePage, canDeletePage, canEdit, canManageRoles, canManageWorkspace } from './lib/permissions'
 import { uid } from './lib/id'
 import Sidebar from './components/Sidebar'
@@ -143,14 +144,23 @@ export default function App() {
     setHistoryOpen(false)
   }
 
-  const exportMarkdown = (page: Page) => {
-    const blob = new Blob([pageToMarkdown(page)], { type: 'text/markdown' })
+  const downloadText = (filename: string, text: string, type = 'text/markdown') => {
+    const blob = new Blob([text], { type })
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
     a.href = url
-    a.download = markdownFilename(page)
+    a.download = filename
     a.click()
     URL.revokeObjectURL(url)
+  }
+
+  const exportWorkspace = () => {
+    downloadText(workspaceFilename(activeWorkspace), workspaceToMarkdown(activeWorkspace, state.pages))
+    showToast(`Exported workspace “${activeWorkspace.name}” as Markdown.`)
+  }
+
+  const exportMarkdown = (page: Page) => {
+    downloadText(markdownFilename(page), pageToMarkdown(page))
     showToast(`Exported “${page.title || 'Untitled'}” as Markdown.`)
   }
 
@@ -257,6 +267,7 @@ export default function App() {
               <button className="btn" onClick={() => setFocusOpen(true)} title="Distraction-free writing (Ctrl/⌘ Shift F)">◎ Focus</button>
               <button className="btn" onClick={() => setHistoryOpen(true)} title="Browse and restore past versions">🕘 History</button>
               <button className="btn" onClick={() => exportMarkdown(activePage)} title="Download this doc as Markdown">↓ .md</button>
+              <button className="btn" onClick={exportWorkspace} title="Download the whole workspace as one Markdown file">⇩ Workspace</button>
               <button
                 className="btn"
                 onClick={() => updatePages(state.pages.map((p) => (p.id === activePage.id ? { ...p, favourite: !p.favourite } : p)))}
