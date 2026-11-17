@@ -33,6 +33,7 @@ export default function App() {
     return window.matchMedia?.('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
   })
   const toastTimer = useRef<number | undefined>(undefined)
+  const saveSnapshotRef = useRef<() => void>(() => {})
   const prevPageIdRef = useRef<string | null>(state.activePageId)
 
   const activeWorkspace: Workspace =
@@ -87,7 +88,7 @@ export default function App() {
         setFocusOpen((v) => !v)
       } else if (mod && e.key.toLowerCase() === 's') {
         e.preventDefault()
-        saveSnapshot()
+        saveSnapshotRef.current()
       }
     }
     window.addEventListener('keydown', onKey)
@@ -139,6 +140,7 @@ export default function App() {
     }))
     showToast('📸 Snapshot saved — find it in Version history.')
   }
+  saveSnapshotRef.current = saveSnapshot
 
   const restoreVersion = (snapshot: VersionSnapshot) => {
     if (!activePage || readOnly) return
