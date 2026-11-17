@@ -58,3 +58,17 @@ Viewers see a read-only banner explaining exactly what is blocked. The demo ship
 | `Shift + Enter` | New line inside a code block |
 | `Esc` | Close dialogs, menus and focus mode |
 | `/` (at block start) | Turn the block into another type |
+
+## How to run
+
+```bash
+npm install   # install dependencies
+npm run dev   # start the dev server (http://localhost:5173)
+npm run build # typecheck + production build into dist/
+npm run preview # serve the production build (http://localhost:4173)
+npm test      # run the Vitest suite
+npm run typecheck # tsc --noEmit
+npm run smoke # build + serve + verify the app shell and bundle
+```
+
+Requires Node 24 (see `.nvmrc`). No environment variables, no secrets, no backend to configure — just open the page and write.
