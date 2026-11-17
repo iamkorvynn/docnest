@@ -31,6 +31,11 @@ export function addSnapshot(versions: VersionSnapshot[], snapshot: VersionSnapsh
   return next.filter((v) => v.pageId !== snapshot.pageId || keep.has(v.id))
 }
 
+/** Delete one snapshot by id. */
+export function deleteSnapshot(versions: VersionSnapshot[], snapshotId: string): VersionSnapshot[] {
+  return versions.filter((v) => v.id !== snapshotId)
+}
+
 /** Restore a page's content from a snapshot (keeps the page's id and metadata). */
 export function restoreSnapshot(page: Page, snapshot: VersionSnapshot): Page {
   if (snapshot.pageId !== page.id) return page
