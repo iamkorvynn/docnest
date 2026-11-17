@@ -80,6 +80,18 @@ export default function App() {
     if (window.location.hash !== link) window.history.replaceState(null, '', link)
   }, [state.activePageId])
 
+  // Auto-snapshot the active page every 5 minutes while it has unsaved changes.
+  useEffect(() => {
+    const timer = window.setInterval(() => {
+      setState((s) => {
+        const page = s.pages.find((p) => p.id === s.activePageId)
+        if (!page || !pageDiffersFromLatest(page, s.versions)) return s
+        return { ...s, versions: addSnapshot(s.versions, createSnapshot(page, 'Auto-saved (5 min)')) }
+      })
+    }, 5 * 60 * 1000)
+    return () => window.clearInterval(timer)
+  }, [])
+
   // Auto-snapshot the page we are leaving, if it changed since its last snapshot.
   useEffect(() => {
     const prevId = prevPageIdRef.current
