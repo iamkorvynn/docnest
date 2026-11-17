@@ -362,6 +362,7 @@ export default function App() {
           onCopyPageMarkdown={copyPageMarkdown}
           onCopyLink={copyPageLink}
           onExportWorkspace={exportWorkspace}
+          onPrint={() => window.print()}
           onToggleFavourite={() => activePage && updatePages(state.pages.map((p) => (p.id === activePage.id ? { ...p, favourite: !p.favourite } : p)))}
         />
 

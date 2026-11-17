@@ -16,6 +16,7 @@ interface Props {
   onCopyLink: () => void
   onExportWorkspace: () => void
   onToggleFavourite: () => void
+  onPrint: () => void
 }
 
 /** The bar above the editor: breadcrumbs, role, theme and doc actions. */
@@ -43,6 +44,7 @@ export default function TopBar(props: Props) {
           <button className="btn" onClick={props.onCopyPageMarkdown} title="Copy this doc as Markdown">⧉ Copy .md</button>
           <button className="btn" onClick={props.onCopyLink} title="Copy a link to this page">🔗 Copy link</button>
           <button className="btn" onClick={props.onExportWorkspace} title="Download the whole workspace as one Markdown file">⇩ Workspace</button>
+          <button className="btn" onClick={props.onPrint} title="Print this page">🖨 Print</button>
           <button
             className="btn"
             onClick={props.onToggleFavourite}
