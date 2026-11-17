@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import type { Page } from '../types'
 import { searchPages } from '../lib/search'
+import Highlight from './Highlight'
 
 interface Props {
   pages: Page[]
@@ -66,8 +67,8 @@ export default function SearchModal({ pages, workspaceId, workspaceName, onOpen,
           {results.map((r, i) => (
             <button key={r.page.id} className={`search-result ${i === selected ? 'selected' : ''}`} onClick={() => { onOpen(r.page.id); onClose() }} onMouseEnter={() => setSelected(i)}>
               <div className="r-tag">{r.matchIn === 'title' ? 'Title match' : r.matchIn === 'both' ? 'Title + content' : 'Content match'}</div>
-              <div className="r-title">{r.page.icon} {r.page.title || 'Untitled'}</div>
-              <div className="r-excerpt">{r.excerpt}</div>
+              <div className="r-title">{r.page.icon} <Highlight text={r.page.title || 'Untitled'} query={query} /></div>
+              <div className="r-excerpt"><Highlight text={r.excerpt} query={query} /></div>
             </button>
           ))}
         </div>
