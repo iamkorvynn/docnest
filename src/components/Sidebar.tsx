@@ -44,6 +44,10 @@ export default function Sidebar(props: Props) {
     [pages, activeWorkspace.id],
   )
   const favourites = pages.filter((p) => p.workspaceId === activeWorkspace.id && p.favourite && !p.trashed)
+  const recent = pages
+    .filter((p) => p.workspaceId === activeWorkspace.id && !p.trashed)
+    .sort((a, b) => b.updatedAt - a.updatedAt)
+    .slice(0, 4)
   const trashedCount = pages.filter((p) => p.workspaceId === activeWorkspace.id && p.trashed).length
   const canEdit = canCreatePage(activeWorkspace.role)
 
@@ -139,6 +143,18 @@ export default function Sidebar(props: Props) {
           {favourites.map((p) => (
             <button key={p.id} className={`sidebar-item ${p.id === activePageId ? 'active' : ''}`} onClick={() => props.onSelectPage(p.id)}>
               <span className="icon">⭐</span>
+              <span className="title">{p.title || 'Untitled'}</span>
+            </button>
+          ))}
+        </div>
+      )}
+
+      {recent.length > 0 && (
+        <div className="sidebar-section">
+          <div className="sidebar-label">Recent</div>
+          {recent.map((p) => (
+            <button key={p.id} className={`sidebar-item ${p.id === activePageId ? 'active' : ''}`} onClick={() => props.onSelectPage(p.id)}>
+              <span className="icon">{p.icon}</span>
               <span className="title">{p.title || 'Untitled'}</span>
             </button>
           ))}
