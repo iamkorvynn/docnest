@@ -139,3 +139,14 @@ describe('countWords', () => {
     expect(countWords([b('   ')])).toBe(0)
   })
 })
+
+describe('callout blocks', () => {
+  it('creates and splits callouts like other text blocks', async () => {
+    const { createBlock, splitBlock, BLOCK_LABELS } = await import('../blocks')
+    expect(BLOCK_LABELS.callout).toBe('Callout')
+    const block = createBlock('callout', 'hello world')
+    const { blocks } = splitBlock([block], block.id, 5)
+    expect(blocks.map((b) => b.text)).toEqual(['hello', ' world'])
+    expect(blocks[1].type).toBe('callout')
+  })
+})

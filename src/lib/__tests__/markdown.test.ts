@@ -67,3 +67,10 @@ describe('pageToMarkdown / markdownFilename', () => {
     expect(markdownFilename({ ...page, title: '' })).toBe('untitled.md')
   })
 })
+
+describe('callout export', () => {
+  it('renders callouts as blockquotes with a bulb', async () => {
+    const { blocksToMarkdown } = await import('../markdown')
+    expect(blocksToMarkdown([{ id: 'c1', type: 'callout', text: 'remember this' }])).toBe('> 💡 remember this')
+  })
+})
