@@ -18,6 +18,7 @@ import TemplatesModal from './components/TemplatesModal'
 import VersionHistory from './components/VersionHistory'
 import FocusMode from './components/FocusMode'
 import TrashPanel from './components/TrashPanel'
+import ShortcutsModal from './components/ShortcutsModal'
 import RoleBadge from './components/RoleBadge'
 
 export default function App() {
@@ -34,6 +35,7 @@ export default function App() {
   const [historyOpen, setHistoryOpen] = useState(false)
   const [focusOpen, setFocusOpen] = useState(false)
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [shortcutsOpen, setShortcutsOpen] = useState(false)
   const [toast, setToast] = useState<string | null>(null)
   const [theme, setTheme] = useState<'light' | 'dark'>(() => {
     const stored = localStorage.getItem('docnest-theme')
@@ -101,6 +103,9 @@ export default function App() {
       } else if (mod && e.shiftKey && e.key.toLowerCase() === 'f') {
         e.preventDefault()
         setFocusOpen((v) => !v)
+      } else if (e.key === '?' && !mod) {
+        const target = e.target as HTMLElement
+        if (target.tagName !== 'INPUT' && target.tagName !== 'TEXTAREA') setShortcutsOpen((v) => !v)
       } else if (mod && e.key.toLowerCase() === 's') {
         e.preventDefault()
         saveSnapshotRef.current()
@@ -327,7 +332,8 @@ export default function App() {
           </button>
           {activePage && (
             <>
-              <button className="btn" onClick={() => setFocusOpen(true)} title="Distraction-free writing (Ctrl/⌘ Shift F)">◎ Focus</button>
+              <button className="btn" onClick={() => setShortcutsOpen(true)} title="Keyboard shortcuts (?)">⌨ Shortcuts</button>
+          <button className="btn" onClick={() => setFocusOpen(true)} title="Distraction-free writing (Ctrl/⌘ Shift F)">◎ Focus</button>
               <button className="btn" onClick={() => setHistoryOpen(true)} title="Browse and restore past versions">🕘 History</button>
               <button className="btn" onClick={() => exportMarkdown(activePage)} title="Download this doc as Markdown">↓ .md</button>
               <button
@@ -406,6 +412,7 @@ export default function App() {
         </div>
       </div>
 
+      {shortcutsOpen && <ShortcutsModal onClose={() => setShortcutsOpen(false)} />}
       {searchOpen && (
         <SearchModal
           pages={state.pages}
