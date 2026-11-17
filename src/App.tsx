@@ -73,6 +73,26 @@ export default function App() {
     saveState(state)
   }, [state])
 
+  // Follow the browser back/forward buttons: a #/page/ hash opens that page.
+  useEffect(() => {
+    const onHash = () => {
+      const linkedId = pageIdFromHash(window.location.hash)
+      if (!linkedId) return
+      setState((s) => {
+        const linked = s.pages.find((p) => p.id === linkedId && !p.trashed)
+        if (!linked || linked.id === s.activePageId) return s
+        return {
+          ...s,
+          activeWorkspaceId: linked.workspaceId,
+          activePageId: linked.id,
+          pages: s.pages.map((p) => (p.id === linked.id ? { ...p, lastOpenedAt: Date.now() } : p)),
+        }
+      })
+    }
+    window.addEventListener('hashchange', onHash)
+    return () => window.removeEventListener('hashchange', onHash)
+  }, [])
+
   // Keep the URL hash in sync so the current page is linkable.
   useEffect(() => {
     if (!state.activePageId) return
