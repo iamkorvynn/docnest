@@ -64,3 +64,14 @@ describe('pageDiffersFromLatest', () => {
     expect(pageDiffersFromLatest({ ...p, blocks: [{ id: 'b0', type: 'h1', text: 'hello' }] }, versions)).toBe(true)
   })
 })
+
+describe('deleteSnapshot', () => {
+  it('removes only the named snapshot', async () => {
+    const { deleteSnapshot } = await import('../versions')
+    const a = createSnapshot(page(), 'a')
+    const b = createSnapshot(page(), 'b')
+    const out = deleteSnapshot([a, b], a.id)
+    expect(out).toEqual([b])
+    expect(deleteSnapshot([a, b], 'missing')).toEqual([a, b])
+  })
+})
