@@ -17,6 +17,7 @@ interface Props {
   onRenameWorkspace: (id: string, name: string) => void
   onDeleteWorkspace: (id: string) => void
   onRoleChange: (id: string, role: Role) => void
+  onColorChange: (id: string, color: string) => void
   onSelectPage: (id: string) => void
   onNewPage: (parentId?: string | null) => void
   onNewPageFromTemplate: () => void
@@ -121,6 +122,7 @@ export default function Sidebar(props: Props) {
         onRename={props.onRenameWorkspace}
         onDelete={props.onDeleteWorkspace}
         onRoleChange={props.onRoleChange}
+        onColorChange={props.onColorChange}
       />
 
       <div style={{ display: 'flex', gap: 4, marginTop: 12 }}>

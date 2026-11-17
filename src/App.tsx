@@ -274,6 +274,7 @@ export default function App() {
         onRenameWorkspace={renameWorkspace}
         onDeleteWorkspace={deleteWorkspace}
         onRoleChange={changeRole}
+        onColorChange={(id, color) => setState((s) => ({ ...s, workspaces: s.workspaces.map((w) => (w.id === id ? { ...w, color } : w)) }))}
         onSelectPage={(id) => { setState((s) => ({ ...s, activePageId: id })); setSidebarOpen(false) }}
         onNewPage={(parentId) => createPage(parentId ?? null)}
         onNewPageFromTemplate={() => setTemplatesOpen(true)}

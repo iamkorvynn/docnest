@@ -12,11 +12,14 @@ interface Props {
   onDelete: (id: string) => void
   /** Demo role switching: changes what the UI allows in this workspace. */
   onRoleChange: (id: string, role: Role) => void
+  onColorChange: (id: string, color: string) => void
 }
 
 const ROLE_ORDER: Role[] = ['owner', 'editor', 'viewer']
 
-export default function WorkspaceSwitcher({ workspaces, active, onSelect, onCreate, onRename, onDelete, onRoleChange }: Props) {
+export const WORKSPACE_COLORS = ['#d97706', '#2563eb', '#059669', '#db2777', '#7c3aed', '#78716c']
+
+export default function WorkspaceSwitcher({ workspaces, active, onSelect, onCreate, onRename, onDelete, onRoleChange, onColorChange }: Props) {
   const [open, setOpen] = useState(false)
   const [creating, setCreating] = useState(false)
   const [name, setName] = useState('')
@@ -110,6 +113,20 @@ export default function WorkspaceSwitcher({ workspaces, active, onSelect, onCrea
               ✏️ Rename workspace
             </button>
           )}
+          <div style={{ padding: '6px 9px', display: 'flex', gap: 7, alignItems: 'center' }}>
+            <span style={{ fontSize: 12, color: 'var(--text-dim)' }}>Colour</span>
+            {WORKSPACE_COLORS.map((c) => (
+              <button
+                key={c}
+                title={`Set workspace colour ${c}`}
+                onClick={() => onColorChange(active.id, c)}
+                style={{
+                  width: 20, height: 20, borderRadius: '50%', border: active.color === c ? '2px solid var(--text)' : '2px solid transparent',
+                  background: c, padding: 0,
+                }}
+              />
+            ))}
+          </div>
           <button onClick={() => setRoleOpen((v) => !v)}>👤 Switch my role {roleOpen ? '▴' : '▾'}</button>
           {roleOpen && (
             <div style={{ padding: '2px 4px 6px' }}>
