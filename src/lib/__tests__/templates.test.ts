@@ -5,8 +5,9 @@ import { blocksToPlainText } from '../blocks'
 describe('templates', () => {
   it('ships blank, meeting, project, reading and journal templates', () => {
     expect(TEMPLATES.map((t) => t.id)).toEqual(
-      expect.arrayContaining(['blank', 'meeting-notes', 'project-plan', 'reading-list', 'daily-journal']),
+      expect.arrayContaining(['blank', 'meeting-notes', 'project-plan', 'reading-list', 'daily-journal', 'weekly-review', 'book-notes']),
     )
+    expect(TEMPLATES).toHaveLength(7)
   })
   it('every template has a name, description, icon and at least one block', () => {
     for (const t of TEMPLATES) {
@@ -14,6 +15,12 @@ describe('templates', () => {
       expect(t.description.length).toBeGreaterThan(0)
       expect(t.blocks().length).toBeGreaterThan(0)
     }
+  })
+  it('weekly review includes wins, lessons and next week', () => {
+    const text = blocksToPlainText(getTemplate('weekly-review').blocks())
+    expect(text).toMatch(/Wins/)
+    expect(text).toMatch(/Lesson learned/)
+    expect(text).toMatch(/Next week/)
   })
   it('meeting notes include agenda, decisions and action items', () => {
     const text = blocksToPlainText(getTemplate('meeting-notes').blocks())
