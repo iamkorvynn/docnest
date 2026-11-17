@@ -2,14 +2,15 @@
   "name": "docnest",
   "private": true,
   "version": "0.1.0",
-  "description": "DocNest — a local-first workspace app with a block editor, roles, focus mode and per-doc version history.",
+  "description": "DocNest \u2014 a local-first workspace app with a block editor, roles, focus mode and per-doc version history.",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
     "preview": "vite preview",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "typecheck": "tsc -b --noEmit"
   },
   "dependencies": {
     "react": "^18.3.1",
