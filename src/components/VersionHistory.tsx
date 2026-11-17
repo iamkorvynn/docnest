@@ -1,4 +1,6 @@
+import { useState } from 'react'
 import type { Page, VersionSnapshot } from '../types'
+import ConfirmDialog from './ConfirmDialog'
 import { snapshotsForPage } from '../lib/versions'
 import { blocksToPlainText } from '../lib/blocks'
 
@@ -14,6 +16,8 @@ interface Props {
 /** Per-doc version timeline: browse snapshots and restore any of them. */
 export default function VersionHistory({ page, versions, onRestore, onDelete, onSaveSnapshot, onClose }: Props) {
   const snaps = snapshotsForPage(versions, page.id)
+  const [pendingRestore, setPendingRestore] = useState<VersionSnapshot | null>(null)
+  const [pendingDelete, setPendingDelete] = useState<VersionSnapshot | null>(null)
 
   return (
     <div className="history-panel">
@@ -41,16 +45,35 @@ export default function VersionHistory({ page, versions, onRestore, onDelete, on
               {blocksToPlainText(s.blocks).slice(0, 110) || '(empty)'}
             </div>
             <div className="v-actions">
-              <button className="btn" onClick={() => { if (window.confirm(`Restore “${s.title || 'Untitled'}” from ${new Date(s.createdAt).toLocaleString()}? Your current version is snapshotted first.`)) onRestore(s) }}>
+              <button className="btn" onClick={() => setPendingRestore(s)}>
                 Restore this version
               </button>
-              <button className="btn danger" onClick={() => { if (window.confirm('Delete this snapshot?')) onDelete(s.id) }}>
+              <button className="btn danger" onClick={() => setPendingDelete(s)}>
                 Delete
               </button>
             </div>
           </li>
         ))}
       </ul>
+      {pendingRestore && (
+        <ConfirmDialog
+          title="Restore this version?"
+          message={`Restore “${pendingRestore.title || 'Untitled'}” from ${new Date(pendingRestore.createdAt).toLocaleString()}? Your current version is snapshotted first.`}
+          confirmLabel="Restore"
+          onConfirm={() => { onRestore(pendingRestore); setPendingRestore(null) }}
+          onCancel={() => setPendingRestore(null)}
+        />
+      )}
+      {pendingDelete && (
+        <ConfirmDialog
+          title="Delete this snapshot?"
+          message="This snapshot will be gone for good."
+          confirmLabel="Delete"
+          danger
+          onConfirm={() => { onDelete(pendingDelete.id); setPendingDelete(null) }}
+          onCancel={() => setPendingDelete(null)}
+        />
+      )}
     </div>
   )
 }
