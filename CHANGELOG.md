@@ -21,3 +21,10 @@ First release — the complete local-first workspace app.
 - Dark mode (persisted, follows system preference), reading progress bar, word count, to-do progress
 - 97 unit tests (Vitest) covering the block model, tree, search, permissions, Markdown, versions, backup, links, icons, dates, stats, templates and store
 - CI (GitHub Actions: typecheck + test + build), smoke-test script, MIT license
+
+## [Unreleased]
+
+Ideas queued for later (see `docs/ROADMAP.md` for the full list):
+- Real-time collaboration and sharing (needs a backend; roles already model the permissions)
+- Drag-and-drop reordering of pages and blocks
+- Image uploads stored as data URLs
