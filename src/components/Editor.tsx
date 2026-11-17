@@ -50,6 +50,10 @@ export default function Editor({ page, readOnly, focus, onTitleChange, onBlocksC
   }, [page.title])
 
   const words = useMemo(() => countWords(page.blocks), [page.blocks])
+  const todos = useMemo(() => {
+    const all = page.blocks.filter((b) => b.type === 'todo')
+    return { done: all.filter((b) => b.checked).length, total: all.length }
+  }, [page.blocks])
   const minutes = Math.max(1, Math.round(words / 200))
   const updated = relativeTime(page.updatedAt)
 
@@ -101,6 +105,7 @@ export default function Editor({ page, readOnly, focus, onTitleChange, onBlocksC
       <div className="doc-meta">
         <span>{words} words · ~{minutes} min read</span>
         <span>{page.blocks.length} blocks</span>
+        {todos.total > 0 && <span>✓ {todos.done}/{todos.total} to-dos done</span>}
         <span>Last edited {updated}</span>
         {!readOnly && (
           <button className="btn" style={{ padding: '2px 9px', fontSize: 12 }} onClick={onSaveSnapshot} title="Save a snapshot you can restore later">
