@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
-import { blocksToMarkdown } from '../lib/markdown'
 import { relativeTime } from '../lib/dates'
 import type { Block, BlockType, Page } from '../types'
 import {
