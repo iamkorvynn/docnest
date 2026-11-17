@@ -172,7 +172,7 @@ export default function Sidebar(props: Props) {
 
       <div className="sidebar-section">
         <div className="sidebar-label">
-          Pages
+          Pages ({tree.length})
           <select
             value={sortBy}
             onChange={(e) => setSortBy(e.target.value as 'created' | 'title' | 'recent')}
