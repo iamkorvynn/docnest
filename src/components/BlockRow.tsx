@@ -168,17 +168,20 @@ export default function BlockRow(props: Props) {
           </>
         )}
         {typeMenuOpen && (
-          <div className="ws-menu" style={{ position: 'absolute', left: 44, top: 26, zIndex: 30, minWidth: 170 }}>
-            {BLOCK_TYPES.map((t) => (
-              <button
-                key={t}
-                onClick={() => { props.onTypeChange(block.id, t); setTypeMenuOpen(false) }}
-                style={{ fontWeight: block.type === t ? 700 : 400 }}
-              >
-                {BLOCK_LABELS[t]}{block.type === t ? ' ✓' : ''}
-              </button>
-            ))}
-          </div>
+          <>
+            <div style={{ position: 'fixed', inset: 0, zIndex: 29 }} onClick={() => setTypeMenuOpen(false)} />
+            <div className="ws-menu" style={{ position: 'absolute', left: 44, top: 26, zIndex: 30, minWidth: 170 }}>
+              {BLOCK_TYPES.map((t) => (
+                <button
+                  key={t}
+                  onClick={() => { props.onTypeChange(block.id, t); setTypeMenuOpen(false) }}
+                  style={{ fontWeight: block.type === t ? 700 : 400 }}
+                >
+                  {BLOCK_LABELS[t]}{block.type === t ? ' ✓' : ''}
+                </button>
+              ))}
+            </div>
+          </>
         )}
       </div>
       <div className="block-body">{body}</div>
