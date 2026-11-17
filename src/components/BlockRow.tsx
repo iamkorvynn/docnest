@@ -16,6 +16,7 @@ interface Props {
   onMove: (id: string, dir: -1 | 1) => void
   onToggleTodo: (id: string) => void
   onSrcChange: (id: string, src: string) => void
+  onCopyMarkdown: (block: Block) => void
 }
 
 const PLACEHOLDERS: Partial<Record<BlockType, string>> = {
@@ -87,6 +88,7 @@ export default function BlockRow(props: Props) {
             <>
               <button title="Move up (Alt+↑)" onClick={() => props.onMove(block.id, -1)}>↑</button>
               <button title="Move down (Alt+↓)" onClick={() => props.onMove(block.id, 1)}>↓</button>
+              <button title="Copy block as Markdown" onClick={() => props.onCopyMarkdown(block)}>📋</button>
               <button title="Delete image" onClick={() => props.onDelete(block.id)}>✕</button>
             </>
           )}
@@ -199,6 +201,7 @@ export default function BlockRow(props: Props) {
             <button title="Move up (Alt+↑)" onClick={() => props.onMove(block.id, -1)}>↑</button>
             <button title="Move down (Alt+↓)" onClick={() => props.onMove(block.id, 1)}>↓</button>
             <button title="Duplicate block" onClick={() => props.onDuplicate(block.id)}>⧉</button>
+            <button title="Copy block as Markdown" onClick={() => props.onCopyMarkdown(block)}>📋</button>
             <button title="Delete block" onClick={() => props.onDelete(block.id)}>✕</button>
           </>
         )}

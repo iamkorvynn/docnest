@@ -384,6 +384,14 @@ export default function App() {
               onBlocksChange={updateBlocks}
               onSaveSnapshot={() => saveSnapshot()}
               onIconChange={(icon) => updatePages(state.pages.map((p) => (p.id === activePage.id ? { ...p, icon, updatedAt: Date.now() } : p)))}
+              onCopyBlock={async (block) => {
+                try {
+                  await navigator.clipboard.writeText(blocksToMarkdown([block]))
+                  showToast('Block copied as Markdown.')
+                } catch {
+                  showToast('Clipboard blocked in this browser.')
+                }
+              }}
             />
 ) : (
             <EmptyState
@@ -449,6 +457,14 @@ export default function App() {
           onBlocksChange={updateBlocks}
           onSaveSnapshot={() => saveSnapshot()}
           onIconChange={(icon) => updatePages(state.pages.map((p) => (p.id === activePage.id ? { ...p, icon, updatedAt: Date.now() } : p)))}
+          onCopyBlock={async (block) => {
+            try {
+              await navigator.clipboard.writeText(blocksToMarkdown([block]))
+              showToast('Block copied as Markdown.')
+            } catch {
+              showToast('Clipboard blocked in this browser.')
+            }
+          }}
           onExit={() => setFocusOpen(false)}
         />
       )}

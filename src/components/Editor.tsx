@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
+import { blocksToMarkdown } from '../lib/markdown'
 import { relativeTime } from '../lib/dates'
 import type { Block, BlockType, Page } from '../types'
 import {
@@ -28,10 +29,11 @@ interface Props {
   onBlocksChange: (blocks: Block[]) => void
   onSaveSnapshot: () => void
   onIconChange?: (icon: string) => void
+  onCopyBlock?: (block: Block) => void
 }
 
 /** The document editor: title, block list, add-block menu, word count. */
-export default function Editor({ page, readOnly, focus, onTitleChange, onBlocksChange, onSaveSnapshot, onIconChange }: Props) {
+export default function Editor({ page, readOnly, focus, onTitleChange, onBlocksChange, onSaveSnapshot, onIconChange, onCopyBlock }: Props) {
   const cycleIcon = () => {
     if (readOnly || !onIconChange) return
     const idx = PAGE_ICONS.indexOf(page.icon)
@@ -130,6 +132,7 @@ export default function Editor({ page, readOnly, focus, onTitleChange, onBlocksC
           onMove={(id, dir) => setBlocks(moveBlock(page.blocks, id, dir))}
           onToggleTodo={(id) => setBlocks(toggleTodo(page.blocks, id))}
           onSrcChange={(id, src) => setBlocks(page.blocks.map((b) => (b.id === id ? { ...b, src } : b)))}
+          onCopyMarkdown={(block) => onCopyBlock?.(block)}
         />
       ))}
 
