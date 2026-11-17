@@ -108,6 +108,7 @@ export default function Editor({ page, readOnly, focus, onTitleChange, onBlocksC
         <span>{page.blocks.length} blocks</span>
         {todos.total > 0 && <span>✓ {todos.done}/{todos.total} to-dos done</span>}
         <span>Last edited {updated}</span>
+        <span>Created {new Date(page.createdAt).toLocaleDateString()}</span>
         {!readOnly && (
           <button className="btn" style={{ padding: '2px 9px', fontSize: 12 }} onClick={onSaveSnapshot} title="Save a snapshot you can restore later">
             📸 Save snapshot
