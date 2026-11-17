@@ -31,6 +31,19 @@ export function addSnapshot(versions: VersionSnapshot[], snapshot: VersionSnapsh
   return next.filter((v) => v.pageId !== snapshot.pageId || keep.has(v.id))
 }
 
+/** Summarise what changed between two snapshots (for the timeline). */
+export function diffSummary(older: VersionSnapshot, newer: VersionSnapshot): string {
+  const parts: string[] = []
+  if (older.title !== newer.title) parts.push('title changed')
+  const blockDelta = newer.blocks.length - older.blocks.length
+  if (blockDelta > 0) parts.push(`+${blockDelta} block${blockDelta === 1 ? '' : 's'}`)
+  if (blockDelta < 0) parts.push(`${blockDelta} block${blockDelta === -1 ? '' : 's'}`)
+  const olderText = new Set(older.blocks.map((b) => `${b.type}:${b.text}`))
+  const edited = newer.blocks.filter((b) => !olderText.has(`${b.type}:${b.text}`)).length
+  if (edited > 0 && blockDelta === 0) parts.push(`${edited} block${edited === 1 ? '' : 's'} edited`)
+  return parts.length > 0 ? parts.join(' · ') : 'no changes'
+}
+
 /** Delete one snapshot by id. */
 export function deleteSnapshot(versions: VersionSnapshot[], snapshotId: string): VersionSnapshot[] {
   return versions.filter((v) => v.id !== snapshotId)
