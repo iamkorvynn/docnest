@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import type { Block, DocNestState, Page, Role, VersionSnapshot, Workspace } from './types'
 import { loadState, resetState, saveState } from './lib/store'
 import { createBlock } from './lib/blocks'
-import { duplicatePage, getPagePath, nestPage, permanentlyDeletePage, restorePage, trashPage } from './lib/tree'
+import { duplicatePage, getPagePath, movePageToWorkspace, nestPage, permanentlyDeletePage, restorePage, trashPage } from './lib/tree'
 import { getTemplate } from './lib/templates'
 import { addSnapshot, createSnapshot, pageDiffersFromLatest, restoreSnapshot } from './lib/versions'
 import { markdownFilename, pageToMarkdown } from './lib/markdown'
@@ -245,6 +245,11 @@ export default function App() {
           showToast('Page duplicated.')
         }}
         onNestPage={(id, parentId) => updatePages(nestPage(state.pages, id, parentId))}
+        onMoveToWorkspace={(id, workspaceId) => {
+          if (!canEdit(activeWorkspace.role)) { showToast('Viewers cannot move pages.'); return }
+          updatePages(movePageToWorkspace(state.pages, id, workspaceId))
+          showToast('Page moved to the other workspace.')
+        }}
         onTrashPage={(id) => {
           if (!canDeletePage(activeWorkspace.role)) { showToast('Viewers cannot delete pages.'); return }
           updatePages(trashPage(state.pages, id))

@@ -23,6 +23,7 @@ interface Props {
   onToggleFavourite: (id: string) => void
   onDuplicatePage: (id: string) => void
   onNestPage: (id: string, parentId: string | null) => void
+  onMoveToWorkspace: (id: string, workspaceId: string) => void
   onTrashPage: (id: string) => void
   onOpenSearch: () => void
   onOpenTrash: () => void
@@ -88,6 +89,14 @@ export default function Sidebar(props: Props) {
         icon: '📥',
         disabled: !canEdit,
         onClick: () => props.onNestPage(page.id, target.id),
+      })
+    }
+    for (const ws of workspaces.filter((w) => w.id !== page.workspaceId)) {
+      items.push({
+        label: `Move to “${ws.name}”`,
+        icon: '↗️',
+        disabled: !canEdit,
+        onClick: () => props.onMoveToWorkspace(page.id, ws.id),
       })
     }
     items.push({ label: 'Move to trash', icon: '🗑', danger: true, disabled: !canDeletePage(activeWorkspace.role), onClick: () => props.onTrashPage(page.id) })
