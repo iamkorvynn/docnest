@@ -55,7 +55,7 @@ export default function WorkspaceSwitcher({ workspaces, active, onSelect, onCrea
   return (
     <div ref={ref} style={{ position: 'relative' }}>
       <button className="ws-switcher" onClick={() => setOpen((v) => !v)} title="Switch workspace">
-        <span className="ws-avatar">{active.icon}</span>
+        <span className="ws-avatar" style={{ borderColor: active.color, boxShadow: `inset 0 -3px 0 ${active.color}22` }}>{active.icon}</span>
         <span className="ws-meta">
           <span className="ws-name">{active.name}</span>
           <br />
