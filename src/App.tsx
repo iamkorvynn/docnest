@@ -94,6 +94,11 @@ export default function App() {
     return () => window.removeEventListener('hashchange', onHash)
   }, [])
 
+  // Sync the browser tab title with the open page.
+  useEffect(() => {
+    document.title = activePage ? `${activePage.title || 'Untitled'} — DocNest` : 'DocNest — your nest for docs'
+  }, [activePage])
+
   // Keep the URL hash in sync so the current page is linkable.
   useEffect(() => {
     if (!state.activePageId) return
