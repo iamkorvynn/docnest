@@ -38,7 +38,7 @@ export function canManageWorkspace(role: Role): boolean {
 }
 
 /** Can this role export a doc as Markdown? (Everyone can — reading is free.) */
-export function canExport(role: Role): boolean {
+export function canExport(_role: Role): boolean {
   return true
 }
 
