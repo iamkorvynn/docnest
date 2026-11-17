@@ -6,12 +6,13 @@ interface Props {
   page: Page
   versions: VersionSnapshot[]
   onRestore: (snapshot: VersionSnapshot) => void
+  onDelete: (snapshotId: string) => void
   onSaveSnapshot: () => void
   onClose: () => void
 }
 
 /** Per-doc version timeline: browse snapshots and restore any of them. */
-export default function VersionHistory({ page, versions, onRestore, onSaveSnapshot, onClose }: Props) {
+export default function VersionHistory({ page, versions, onRestore, onDelete, onSaveSnapshot, onClose }: Props) {
   const snaps = snapshotsForPage(versions, page.id)
 
   return (
@@ -42,6 +43,9 @@ export default function VersionHistory({ page, versions, onRestore, onSaveSnapsh
             <div className="v-actions">
               <button className="btn" onClick={() => { if (window.confirm(`Restore “${s.title || 'Untitled'}” from ${new Date(s.createdAt).toLocaleString()}? Your current version is snapshotted first.`)) onRestore(s) }}>
                 Restore this version
+              </button>
+              <button className="btn danger" onClick={() => { if (window.confirm('Delete this snapshot?')) onDelete(s.id) }}>
+                Delete
               </button>
             </div>
           </li>

@@ -4,7 +4,7 @@ import { loadState, resetState, saveState } from './lib/store'
 import { createBlock } from './lib/blocks'
 import { duplicatePage, getPagePath, movePageToWorkspace, nestPage, permanentlyDeletePage, restorePage, trashPage } from './lib/tree'
 import { getTemplate } from './lib/templates'
-import { addSnapshot, createSnapshot, pageDiffersFromLatest, restoreSnapshot } from './lib/versions'
+import { addSnapshot, createSnapshot, deleteSnapshot, pageDiffersFromLatest, restoreSnapshot } from './lib/versions'
 import { markdownFilename, pageToMarkdown } from './lib/markdown'
 import { workspaceFilename, workspaceToMarkdown } from './lib/export'
 import { blockedActions, canCreatePage, canDeletePage, canEdit, canManageRoles, canManageWorkspace } from './lib/permissions'
@@ -379,6 +379,7 @@ export default function App() {
           page={activePage}
           versions={state.versions}
           onRestore={restoreVersion}
+          onDelete={(id) => setState((s) => ({ ...s, versions: deleteSnapshot(s.versions, id) }))}
           onSaveSnapshot={() => saveSnapshot()}
           onClose={() => setHistoryOpen(false)}
         />
