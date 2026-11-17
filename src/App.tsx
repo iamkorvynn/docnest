@@ -27,6 +27,11 @@ export default function App() {
   const [focusOpen, setFocusOpen] = useState(false)
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [toast, setToast] = useState<string | null>(null)
+  const [theme, setTheme] = useState<'light' | 'dark'>(() => {
+    const stored = localStorage.getItem('docnest-theme')
+    if (stored === 'dark' || stored === 'light') return stored
+    return window.matchMedia?.('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+  })
   const toastTimer = useRef<number | undefined>(undefined)
   const prevPageIdRef = useRef<string | null>(state.activePageId)
 
@@ -39,6 +44,12 @@ export default function App() {
     () => (activePage ? getPagePath(state.pages, activePage.id) : []),
     [state.pages, activePage],
   )
+
+  // Apply + persist the theme.
+  useEffect(() => {
+    document.documentElement.dataset.theme = theme
+    localStorage.setItem('docnest-theme', theme)
+  }, [theme])
 
   // Persist every change to localStorage.
   useEffect(() => {
@@ -262,6 +273,9 @@ export default function App() {
             ))}
           </div>
           <RoleBadge role={activeWorkspace.role} />
+          <button className="btn" onClick={() => setTheme((t) => (t === 'dark' ? 'light' : 'dark'))} title="Toggle dark / light theme">
+            {theme === 'dark' ? '☀️ Light' : '🌙 Dark'}
+          </button>
           {activePage && (
             <>
               <button className="btn" onClick={() => setFocusOpen(true)} title="Distraction-free writing (Ctrl/⌘ Shift F)">◎ Focus</button>
