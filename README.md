@@ -79,3 +79,34 @@ Requires Node 24 (see `.nvmrc`). No environment variables, no secrets, no backen
 - **Backup / Restore** (sidebar footer): download a JSON file with every workspace, page and snapshot, and restore it later. Backups are validated on import (wrong app, wrong version or malformed state are rejected with a clear message).
 - **Reset demo data** (sidebar footer): restores the three seeded workspaces.
 - Nothing leaves your machine unless you export it. There is no analytics, no account and no server call.
+
+## Project structure
+
+```
+src/
+  App.tsx            # state, persistence, shortcuts, wiring
+  types.ts           # Block, Page, Workspace, Role, VersionSnapshot
+  index.css          # theme (light/dark), editor, sidebar, modals
+  main.tsx           # React entry point
+  lib/
+    blocks.ts        # block model: create/split/merge/move/toggle…
+    tree.ts          # page tree: nest/trash/restore/duplicate/sort
+    search.ts        # full-text search with ranking + excerpts
+    permissions.ts   # owner/editor/viewer capability checks
+    markdown.ts      # Markdown export for blocks + pages
+    export.ts        # whole-workspace Markdown export
+    versions.ts      # snapshots, pruning, restore, diff summary
+    templates.ts     # page templates
+    store.ts         # localStorage load/save + demo seed data
+    backup.ts        # JSON backup serialise/parse + validation
+    links.ts         # #/page/<id> deep links
+    dates.ts         # relative time ("2h ago")
+    icons.ts         # page icon set + cycling
+    stats.ts         # workspace aggregates
+  components/
+    Sidebar.tsx  Editor.tsx  BlockRow.tsx  TopBar.tsx  SearchModal.tsx
+    TemplatesModal.tsx  VersionHistory.tsx  FocusMode.tsx  TrashPanel.tsx
+    WorkspaceSwitcher.tsx  RoleBadge.tsx  ContextMenu.tsx  ConfirmDialog.tsx
+    ShortcutsModal.tsx  Highlight.tsx  EmptyState.tsx  Toast.tsx
+  lib/__tests__/    # Vitest suites for every lib module
+```
