@@ -43,3 +43,18 @@ Every workspace has a role for you: **owner**, **editor** or **viewer**. Switch 
 | Rename / delete the workspace | ✅ | ❌ | ❌ |
 
 Viewers see a read-only banner explaining exactly what is blocked. The demo ships with three workspaces so you can feel all three roles at once: **My Nest** (owner), **Product Team** (editor) and **Company Handbook** (viewer).
+
+## Keyboard shortcuts
+
+| Keys | Does |
+|---|---|
+| `⌘/Ctrl + K` | Search across all docs |
+| `⌘/Ctrl + Shift + F` | Toggle focus mode |
+| `⌘/Ctrl + S` | Save a version snapshot |
+| `?` | Show all shortcuts |
+| `Enter` | Split the current block |
+| `Backspace` (at block start) | Merge with the previous block |
+| `Alt + ↑ / ↓` | Move the current block |
+| `Shift + Enter` | New line inside a code block |
+| `Esc` | Close dialogs, menus and focus mode |
+| `/` (at block start) | Turn the block into another type |
