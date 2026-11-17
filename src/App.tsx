@@ -342,7 +342,7 @@ export default function App() {
         onCloseSidebar={() => setSidebarOpen(false)}
       />
 
-      <div className="main">
+      <div className="main" role="main">
         <TopBar
           workspace={activeWorkspace}
           crumbs={crumbs}

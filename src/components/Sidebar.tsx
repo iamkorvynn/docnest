@@ -114,7 +114,7 @@ export default function Sidebar(props: Props) {
   }
 
   return (
-    <aside className={`sidebar ${props.sidebarOpen ? 'open' : ''}`}>
+    <aside className={`sidebar ${props.sidebarOpen ? 'open' : ''}`} aria-label="Workspace sidebar">
       <WorkspaceSwitcher
         workspaces={workspaces}
         active={activeWorkspace}
