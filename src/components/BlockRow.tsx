@@ -50,11 +50,26 @@ export default function BlockRow(props: Props) {
     if (props.autoFocus) taRef.current?.focus()
   }, [props.autoFocus])
 
+  const slashQuery = !readOnly && block.text.startsWith('/') ? block.text.slice(1).toLowerCase() : null
+  const slashMatches =
+    slashQuery === null
+      ? []
+      : BLOCK_TYPES.filter((t) => BLOCK_LABELS[t].toLowerCase().includes(slashQuery) || t.includes(slashQuery))
+
+  const pickSlash = (type: BlockType) => {
+    props.onTypeChange(block.id, type)
+    props.onTextChange(block.id, '')
+    taRef.current?.focus()
+  }
+
   const onKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     const ta = e.currentTarget
     if (e.key === 'Enter' && !e.shiftKey && block.type !== 'code') {
       e.preventDefault()
       props.onSplit(block.id, ta.selectionStart ?? block.text.length)
+    } else if (e.key === 'Escape' && slashQuery !== null) {
+      e.preventDefault()
+      props.onTextChange(block.id, '')
     } else if (e.key === 'Backspace' && (ta.selectionStart ?? 0) === 0 && (ta.selectionEnd ?? 0) === 0) {
       e.preventDefault()
       props.onMergeBack(block.id)
@@ -176,6 +191,18 @@ export default function BlockRow(props: Props) {
     )
   }
 
+  const slashMenu =
+    slashMatches.length > 0 ? (
+      <div className="ws-menu" style={{ position: 'absolute', left: 48, zIndex: 30, minWidth: 190, marginTop: 4 }}>
+        <div className="menu-note">Turn into… (Esc to cancel)</div>
+        {slashMatches.map((t) => (
+          <button key={t} onClick={() => pickSlash(t)}>
+            {BLOCK_LABELS[t]}
+          </button>
+        ))}
+      </div>
+    ) : null
+
   let body: React.ReactNode
   if (block.type === 'bulleted') {
     body = <div className="block-bullet"><span className="marker">•</span>{input}</div>
@@ -222,7 +249,10 @@ export default function BlockRow(props: Props) {
           </>
         )}
       </div>
-      <div className="block-body">{body}</div>
+      <div className="block-body" style={{ position: 'relative' }}>
+        {body}
+        {slashMenu}
+      </div>
     </div>
   )
 }
