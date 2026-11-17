@@ -22,3 +22,10 @@ No account. No backend. No tracking. Your workspaces, pages and version history 
 - **Deep links** — every page has a `#/page/<id>` link; copy it from the top bar, and back/forward in the browser navigates between pages.
 - **Dark mode** — persisted, and follows your system preference on first run.
 - **Reading progress bar, word count, reading time, to-do progress, created/edited dates** on every page.
+
+## The twist: Focus mode + version history
+
+Most note apps make you choose between writing and organising. DocNest does both, and the twist is that **nothing you write is ever really lost, and nothing distracts you while you write it**:
+
+- **Focus mode** (`⌘/Ctrl+Shift+F` or the `◎ Focus` button) — the whole screen becomes just your doc. No sidebar, no buttons, just words and a live word count. `Esc` brings you back.
+- **Version history** (`🕘 History`) — a timeline of snapshots for the current doc. DocNest snapshots automatically when you leave a changed page and every 5 minutes while you edit, and you can snapshot any time with `⌘/Ctrl+S` or the 📸 button. Each snapshot shows what changed vs the previous one (`+2 blocks`, `title changed`), and restoring one snapshots your current version first — so restore is never destructive.
