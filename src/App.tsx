@@ -85,6 +85,9 @@ export default function App() {
       } else if (mod && e.shiftKey && e.key.toLowerCase() === 'f') {
         e.preventDefault()
         setFocusOpen((v) => !v)
+      } else if (mod && e.key.toLowerCase() === 's') {
+        e.preventDefault()
+        saveSnapshot()
       }
     }
     window.addEventListener('keydown', onKey)
