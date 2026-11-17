@@ -267,6 +267,20 @@ export default function App() {
               <button className="btn" onClick={() => setFocusOpen(true)} title="Distraction-free writing (Ctrl/⌘ Shift F)">◎ Focus</button>
               <button className="btn" onClick={() => setHistoryOpen(true)} title="Browse and restore past versions">🕘 History</button>
               <button className="btn" onClick={() => exportMarkdown(activePage)} title="Download this doc as Markdown">↓ .md</button>
+              <button
+                className="btn"
+                onClick={async () => {
+                  try {
+                    await navigator.clipboard.writeText(pageToMarkdown(activePage))
+                    showToast('Markdown copied to clipboard.')
+                  } catch {
+                    showToast('Clipboard blocked — use the .md download instead.')
+                  }
+                }}
+                title="Copy this doc as Markdown"
+              >
+                ⧉ Copy .md
+              </button>
               <button className="btn" onClick={exportWorkspace} title="Download the whole workspace as one Markdown file">⇩ Workspace</button>
               <button
                 className="btn"
