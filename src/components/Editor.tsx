@@ -42,6 +42,16 @@ export default function Editor({ page, readOnly, focus, onTitleChange, onBlocksC
   const [focusBlockId, setFocusBlockId] = useState<string | null>(null)
   const titleRef = useRef<HTMLTextAreaElement>(null)
 
+  // Brand-new pages (created in the last few seconds, still untitled) get the
+  // title focused so you can start typing immediately.
+  useEffect(() => {
+    if (page.title === '' && page.blocks.length === 1 && page.blocks[0].text === '' && Date.now() - page.createdAt < 10000) {
+      titleRef.current?.focus()
+    }
+    // Only on mount for a given page.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   // Auto-grow the title.
   useEffect(() => {
     const ta = titleRef.current
