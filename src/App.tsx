@@ -21,6 +21,7 @@ import TrashPanel from './components/TrashPanel'
 import ShortcutsModal from './components/ShortcutsModal'
 import EmptyState from './components/EmptyState'
 import Toast from './components/Toast'
+import ConfirmDialog from './components/ConfirmDialog'
 import TopBar from './components/TopBar'
 
 export default function App() {
@@ -38,6 +39,8 @@ export default function App() {
   const [focusOpen, setFocusOpen] = useState(false)
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [shortcutsOpen, setShortcutsOpen] = useState(false)
+  const [pendingReset, setPendingReset] = useState(false)
+  const [pendingBackup, setPendingBackup] = useState<DocNestState | null>(null)
   const [readProgress, setReadProgress] = useState(0)
   const [toast, setToast] = useState<string | null>(null)
   const [theme, setTheme] = useState<'light' | 'dark'>(() => {
@@ -206,10 +209,7 @@ export default function App() {
         showToast(`Could not import: ${BACKUP_ERROR_MESSAGES[result.error]}`)
         return
       }
-      if (window.confirm('Replace everything with this backup? Your current docs will be overwritten.')) {
-        setState(result.state)
-        showToast('Backup restored.')
-      }
+      setPendingBackup(result.state)
     }
     reader.readAsText(file)
   }
@@ -337,12 +337,7 @@ export default function App() {
         onOpenTrash={() => setTrashOpen(true)}
         onExportBackup={exportBackup}
         onImportBackup={importBackup}
-        onResetDemo={() => {
-          if (window.confirm('Reset DocNest to the demo workspaces? Your current docs will be replaced.')) {
-            setState(resetState())
-            showToast('Demo data restored.')
-          }
-        }}
+        onResetDemo={() => setPendingReset(true)}
         sidebarOpen={sidebarOpen}
         onCloseSidebar={() => setSidebarOpen(false)}
       />
@@ -474,6 +469,26 @@ export default function App() {
             }
           }}
           onExit={() => setFocusOpen(false)}
+        />
+      )}
+      {pendingReset && (
+        <ConfirmDialog
+          title="Reset demo data?"
+          message="Reset DocNest to the demo workspaces? Your current docs will be replaced."
+          confirmLabel="Reset"
+          danger
+          onConfirm={() => { setState(resetState()); setPendingReset(false); showToast('Demo data restored.') }}
+          onCancel={() => setPendingReset(false)}
+        />
+      )}
+      {pendingBackup && (
+        <ConfirmDialog
+          title="Restore this backup?"
+          message="Replace everything with this backup? Your current docs will be overwritten."
+          confirmLabel="Restore backup"
+          danger
+          onConfirm={() => { setState(pendingBackup); setPendingBackup(null); showToast('Backup restored.') }}
+          onCancel={() => setPendingBackup(null)}
         />
       )}
       {toast && <Toast message={toast} />}
