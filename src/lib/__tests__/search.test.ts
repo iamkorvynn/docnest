@@ -12,7 +12,7 @@ function page(id: string, title: string, texts: string[], extra: Partial<Page> =
 
 describe('searchPages', () => {
   const pages = [
-    page('1', 'Shazam-lite spec', ['fingerprint audio with hashes']),
+    page('1', 'Shazam-lite spec', ['fingerprint audio with hashes so shazam can match it']),
     page('2', 'Shopping list', ['buy milk and bread']),
     page('3', 'Audio notes', ['the shazam idea came from a podcast']),
     page('4', 'Old draft', ['shazam everywhere'], { trashed: true }),
