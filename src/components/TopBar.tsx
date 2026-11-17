@@ -1,4 +1,4 @@
-import type { Page, Role, Workspace } from '../types'
+import type { Page, Workspace } from '../types'
 import RoleBadge from './RoleBadge'
 
 interface Props {
