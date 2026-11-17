@@ -38,6 +38,7 @@ export default function App() {
   const [focusOpen, setFocusOpen] = useState(false)
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [shortcutsOpen, setShortcutsOpen] = useState(false)
+  const [readProgress, setReadProgress] = useState(0)
   const [toast, setToast] = useState<string | null>(null)
   const [theme, setTheme] = useState<'light' | 'dark'>(() => {
     const stored = localStorage.getItem('docnest-theme')
@@ -363,7 +364,18 @@ export default function App() {
           </div>
         )}
 
-        <div className="content">
+        <div style={{ height: 3, background: 'var(--border)' }} aria-hidden>
+          <div style={{ height: '100%', width: `${readProgress}%`, background: 'var(--accent)', transition: 'width 0.1s' }} />
+        </div>
+
+        <div
+          className="content"
+          onScroll={(e) => {
+            const el = e.currentTarget
+            const max = el.scrollHeight - el.clientHeight
+            setReadProgress(max > 0 ? Math.round((el.scrollTop / max) * 100) : 0)
+          }}
+        >
           {activePage ? (
             <Editor
               page={activePage}
