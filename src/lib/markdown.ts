@@ -22,6 +22,8 @@ function blockToMarkdown(block: Block, numberedCounters: { n: number }): string 
         .split('\n')
         .map((line) => `> ${line}`)
         .join('\n')
+    case 'callout':
+      return `> 💡 ${block.text}`
     case 'divider':
       return '---'
     case 'image':
