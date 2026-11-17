@@ -75,3 +75,17 @@ describe('deleteSnapshot', () => {
     expect(deleteSnapshot([a, b], 'missing')).toEqual([a, b])
   })
 })
+
+describe('diffSummary', () => {
+  it('describes title changes, added/removed blocks and edits', async () => {
+    const { diffSummary } = await import('../versions')
+    const base = createSnapshot(page('A', ['one', 'two']), 'v1')
+    const renamed = { ...createSnapshot(page('B', ['one', 'two']), 'v2'), createdAt: 2 }
+    expect(diffSummary(base, renamed)).toBe('title changed')
+    const added = { ...createSnapshot(page('A', ['one', 'two', 'three']), 'v3'), createdAt: 3 }
+    expect(diffSummary(base, added)).toBe('+1 block')
+    const edited = { ...createSnapshot(page('A', ['one', 'TWO']), 'v4'), createdAt: 4 }
+    expect(diffSummary(base, edited)).toBe('1 block edited')
+    expect(diffSummary(base, base)).toBe('no changes')
+  })
+})
