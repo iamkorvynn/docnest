@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react'
 import type { Page, Workspace } from '../types'
-import { flattenTree, getChildren } from '../lib/tree'
+import { compareByCreated, compareByRecent, compareByTitle, flattenTree, getChildren } from '../lib/tree'
 import { canCreatePage, canDeletePage } from '../lib/permissions'
 import { workspaceStats } from '../lib/stats'
 import WorkspaceSwitcher from './WorkspaceSwitcher'
@@ -45,14 +45,8 @@ export default function Sidebar(props: Props) {
   const [editTitle, setEditTitle] = useState('')
 
   const tree = useMemo(() => {
-    const flat = flattenTree(pages, activeWorkspace.id)
-    if (sortBy === 'title') {
-      return [...flat].sort((a, b) => (a.page.title || 'Untitled').localeCompare(b.page.title || 'Untitled'))
-    }
-    if (sortBy === 'recent') {
-      return [...flat].sort((a, b) => (b.page.lastOpenedAt ?? b.page.updatedAt) - (a.page.lastOpenedAt ?? a.page.updatedAt))
-    }
-    return flat
+    const compare = sortBy === 'title' ? compareByTitle : sortBy === 'recent' ? compareByRecent : compareByCreated
+    return flattenTree(pages, activeWorkspace.id, compare)
   }, [pages, activeWorkspace.id, sortBy])
   const favourites = pages.filter((p) => p.workspaceId === activeWorkspace.id && p.favourite && !p.trashed)
   const recent = pages

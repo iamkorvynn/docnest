@@ -1,11 +1,24 @@
 import type { Page } from '../types'
 import { uid } from './id'
 
+export type PageCompare = (a: Page, b: Page) => number
+
+export const compareByCreated: PageCompare = (a, b) => a.createdAt - b.createdAt
+export const compareByTitle: PageCompare = (a, b) =>
+  (a.title || 'Untitled').localeCompare(b.title || 'Untitled')
+export const compareByRecent: PageCompare = (a, b) =>
+  (b.lastOpenedAt ?? b.updatedAt) - (a.lastOpenedAt ?? a.updatedAt)
+
 /** Direct children of a page (or top-level pages when parentId is null). */
-export function getChildren(pages: Page[], parentId: string | null, workspaceId: string): Page[] {
+export function getChildren(
+  pages: Page[],
+  parentId: string | null,
+  workspaceId: string,
+  compare: PageCompare = compareByCreated,
+): Page[] {
   return pages
     .filter((p) => p.parentId === parentId && p.workspaceId === workspaceId && !p.trashed)
-    .sort((a, b) => a.createdAt - b.createdAt)
+    .sort(compare)
 }
 
 /** All descendants of a page, depth-first. */
@@ -124,11 +137,16 @@ export function getPagePath(pages: Page[], pageId: string): Page[] {
   return path
 }
 
-/** Flatten a workspace's live pages into a depth-annotated list for rendering the tree. */
-export function flattenTree(pages: Page[], workspaceId: string): { page: Page; depth: number }[] {
+/** Flatten a workspace's live pages into a depth-annotated list for rendering the tree.
+ *  Sorting applies within each sibling group, so nesting is never broken. */
+export function flattenTree(
+  pages: Page[],
+  workspaceId: string,
+  compare: PageCompare = compareByCreated,
+): { page: Page; depth: number }[] {
   const out: { page: Page; depth: number }[] = []
   const walk = (parentId: string | null, depth: number) => {
-    for (const child of getChildren(pages, parentId, workspaceId)) {
+    for (const child of getChildren(pages, parentId, workspaceId, compare)) {
       out.push({ page: child, depth })
       walk(child.id, depth + 1)
     }
