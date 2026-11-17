@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
+import { relativeTime } from '../lib/dates'
 import type { Block, BlockType, Page } from '../types'
 import {
   changeBlockType,
@@ -42,7 +43,7 @@ export default function Editor({ page, readOnly, focus, onTitleChange, onBlocksC
 
   const words = useMemo(() => countWords(page.blocks), [page.blocks])
   const minutes = Math.max(1, Math.round(words / 200))
-  const updated = new Date(page.updatedAt).toLocaleString()
+  const updated = relativeTime(page.updatedAt)
 
   // Numbering for numbered-list blocks: count consecutive numbered siblings.
   const numbers = useMemo(() => {
