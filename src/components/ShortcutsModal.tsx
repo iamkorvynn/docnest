@@ -2,13 +2,14 @@
 export default function ShortcutsModal({ onClose }: { onClose: () => void }) {
   const rows: [string, string][] = [
     ['⌘/Ctrl + K', 'Search across all docs'],
+    ['⌘/Ctrl + N', 'New page in the current workspace'],
     ['⌘/Ctrl + Shift + F', 'Toggle focus mode'],
     ['⌘/Ctrl + S', 'Save a version snapshot'],
     ['Enter', 'Split the current block'],
     ['Backspace (at block start)', 'Merge with the previous block'],
     ['Alt + ↑ / ↓', 'Move the current block up / down'],
     ['Shift + Enter', 'New line inside a code block'],
-    ['Esc', 'Close dialogs, menus and focus mode'],
+    ['Esc', 'Close dialogs, menus, focus mode and the sidebar'],
   ]
   return (
     <div className="overlay" onClick={onClose}>
