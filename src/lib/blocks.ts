@@ -11,6 +11,7 @@ export const BLOCK_TYPES: BlockType[] = [
   'todo',
   'code',
   'quote',
+  'callout',
   'divider',
   'image',
 ]
@@ -25,6 +26,7 @@ export const BLOCK_LABELS: Record<BlockType, string> = {
   todo: 'To-do',
   code: 'Code',
   quote: 'Quote',
+  callout: 'Callout',
   divider: 'Divider',
   image: 'Image',
 }
